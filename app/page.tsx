@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Download, Eye, Code, Zap, BookOpen } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { TextEditor } from "@/components/text-editor";
 import { ReferencePanel } from "@/components/reference-panel";
 import { defaultDiagram, exampleDiagrams } from "@/lib/mermaid/examples";
@@ -18,6 +17,7 @@ import {
   SidebarContent,
   SidebarInset,
 } from "@/components/ui/sidebar";
+import { toast } from "sonner";
 
 export default function MermaidEditor() {
   const [code, setCode] = useState(defaultDiagram);
@@ -30,7 +30,7 @@ export default function MermaidEditor() {
   const previewRef = useRef<HTMLDivElement>(null);
   const mermaidRef = useRef<any>(null);
   const initTimeoutRef = useRef<NodeJS.Timeout>();
-  const { toast } = useToast();
+
 
   useEffect(() => {
     const checkDocumentReady = () => {
@@ -337,15 +337,12 @@ export default function MermaidEditor() {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(code);
-      toast({
-        title: "Copied!",
+      toast.success("Copied!", {
         description: "Diagram code copied to clipboard",
       });
     } catch (err) {
-      toast({
-        title: "Failed to copy",
+      toast.error("Failed to copy", {
         description: "Could not copy to clipboard",
-        variant: "destructive",
       });
     }
   };
@@ -371,32 +368,27 @@ export default function MermaidEditor() {
       document.body.removeChild(downloadLink);
       URL.revokeObjectURL(svgUrl);
 
-      toast({
-        title: "Downloaded!",
+      toast.success("Downloaded!", {
         description: "Diagram saved as SVG file",
       });
     } catch (err) {
       console.error("[v0] Download error:", err);
-      toast({
-        title: "Download failed",
+      toast.error("Download failed", {
         description: "Could not download SVG file",
-        variant: "destructive",
       });
     }
   };
 
   const loadExample = (example: (typeof exampleDiagrams)[0]) => {
     setCode(example.code);
-    toast({
-      title: "Example loaded",
+    toast.success("Example loaded", {
       description: `${example.name} diagram loaded`,
     });
   };
 
   const loadReferenceExample = (example: string) => {
     setCode(example);
-    toast({
-      title: "Example loaded",
+    toast.success("Example loaded", {
       description: "Reference example loaded into editor",
     });
   };

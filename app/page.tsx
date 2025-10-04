@@ -18,6 +18,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function MermaidEditor() {
   const [code, setCode] = useState(defaultDiagram);
@@ -420,9 +421,8 @@ export default function MermaidEditor() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-accent/10 rounded-lg">
-                      <Zap className="w-5 h-5 text-accent" />
-                    </div>
+                    <Image src="logo.svg" alt="Mermaid Wave" width={50} height={50} />
+   
                     <div>
                       <h1 className="text-xl font-semibold text-foreground tracking-tight">
                         Mermaid Wave

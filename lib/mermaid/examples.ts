@@ -28,12 +28,13 @@ export const exampleDiagrams = [
       Add to Cart: 5: User
       Checkout: 2: User`,
   },
-]
+];
 
 export const referenceData = {
   flowchart: {
     title: "Flowchart Diagrams",
-    description: "Show processes, decisions, and workflows with connected nodes",
+    description:
+      "Show processes, decisions, and workflows with connected nodes",
     syntax: [
       {
         label: "Direction",
@@ -84,7 +85,8 @@ export const referenceData = {
       {
         pattern: /node|id/i,
         message: "Node naming issue",
-        suggestion: 'Use simple names like A, B, Start. Complex labels need quotes: A["My Label"]',
+        suggestion:
+          'Use simple names like A, B, Start. Complex labels need quotes: A["My Label"]',
       },
       {
         pattern: /subgraph/i,
@@ -100,7 +102,8 @@ export const referenceData = {
   },
   sequence: {
     title: "Sequence Diagrams",
-    description: "Show interactions between actors over time in chronological order",
+    description:
+      "Show interactions between actors over time in chronological order",
     syntax: [
       {
         label: "Participants",
@@ -174,13 +177,15 @@ export const referenceData = {
       {
         pattern: /loop|alt|opt/i,
         message: "Control structure error",
-        suggestion: "Use: loop condition\\n  messages\\nend or alt condition\\n  messages\\nend",
+        suggestion:
+          "Use: loop condition\\n  messages\\nend or alt condition\\n  messages\\nend",
       },
     ],
   },
   journey: {
     title: "User Journey Diagrams",
-    description: "Map user experiences, emotions, and satisfaction scores through a process",
+    description:
+      "Map user experiences, emotions, and satisfaction scores through a process",
     syntax: [
       {
         label: "Basic Structure",
@@ -243,4 +248,11 @@ export const referenceData = {
       },
     ],
   },
-}
+};
+
+export const defaultDiagram = `graph TD
+    A[Start] --> B{Is it?}
+    B -->|Yes| C[OK]
+    C --> D[Rethink]
+    D --> B
+    B ---->|No| E[End]`;

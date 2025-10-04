@@ -1,36 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { BookOpen, ChevronDown, ChevronRight } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-import { referenceData } from "@/lib/examples"
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { BookOpen, ChevronDown, ChevronRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { referenceData } from "@/lib/mermaid/examples";
 
 interface ReferencePanelProps {
-  onLoadExample: (code: string) => void
+  onLoadExample: (code: string) => void;
 }
 
 export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
-  const [selectedReference, setSelectedReference] = useState<keyof typeof referenceData>("flowchart")
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({})
-  const { toast } = useToast()
+  const [selectedReference, setSelectedReference] =
+    useState<keyof typeof referenceData>("flowchart");
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({});
+  const { toast } = useToast();
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({
       ...prev,
       [section]: !prev[section],
-    }))
-  }
+    }));
+  };
 
   const loadReferenceExample = (example: string) => {
-    onLoadExample(example)
+    onLoadExample(example);
     toast({
       title: "Example loaded",
       description: "Reference example loaded into editor",
-    })
-  }
+    });
+  };
 
   return (
     <Card className="flex flex-col shadow-sm border-border/50 bg-card/50">
@@ -38,7 +41,9 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
         <div className="p-1.5 bg-accent/10 rounded-md">
           <BookOpen className="w-4 h-4 text-accent" />
         </div>
-        <span className="font-semibold text-sm text-foreground">Reference Guide</span>
+        <span className="font-semibold text-sm text-foreground">
+          Reference Guide
+        </span>
       </div>
       <div className="flex-1 overflow-auto">
         <div className="p-5 border-b border-border/30">
@@ -48,7 +53,9 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 key={key}
                 variant={selectedReference === key ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setSelectedReference(key as keyof typeof referenceData)}
+                onClick={() =>
+                  setSelectedReference(key as keyof typeof referenceData)
+                }
                 className="text-xs justify-start h-8 bg-muted/20 hover:bg-slate-600 hover:text-white text-foreground"
               >
                 {data.title.split(" ")[0]}
@@ -59,12 +66,18 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
 
         <div className="p-4">
           <div className="mb-4">
-            <h3 className="font-semibold text-sm mb-1">{referenceData[selectedReference].title}</h3>
-            <p className="text-xs text-muted-foreground mb-3">{referenceData[selectedReference].description}</p>
+            <h3 className="font-semibold text-sm mb-1">
+              {referenceData[selectedReference].title}
+            </h3>
+            <p className="text-xs text-muted-foreground mb-3">
+              {referenceData[selectedReference].description}
+            </p>
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium text-xs text-muted-foreground uppercase tracking-wide">Syntax</h4>
+            <h4 className="font-medium text-xs text-muted-foreground uppercase tracking-wide">
+              Syntax
+            </h4>
             {referenceData[selectedReference].syntax.map((item, index) => (
               <div key={index}>
                 <button
@@ -94,11 +107,15 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium text-xs text-muted-foreground uppercase tracking-wide">Example</h4>
+              <h4 className="font-medium text-xs text-muted-foreground uppercase tracking-wide">
+                Example
+              </h4>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => loadReferenceExample(referenceData[selectedReference].example)}
+                onClick={() =>
+                  loadReferenceExample(referenceData[selectedReference].example)
+                }
                 className="text-xs h-6 px-2 bg-muted/20 hover:bg-slate-600 hover:text-white text-foreground"
               >
                 Load
@@ -111,5 +128,5 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
         </div>
       </div>
     </Card>
-  )
+  );
 }

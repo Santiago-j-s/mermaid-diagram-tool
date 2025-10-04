@@ -13,17 +13,25 @@
   --popover-foreground: oklch(0.205 0 0); /* #1f2937 - Readable popover text */
   --primary: oklch(0.269 0 0); /* #374151 - Deep gray for stability */
   --primary-foreground: oklch(1 0 0); /* #ffffff - White text on primary */
-  --secondary: oklch(0.488 0.243 264.376); /* #6366f1 - Professional blue accent */
+  --secondary: oklch(
+    0.488 0.243 264.376
+  ); /* #6366f1 - Professional blue accent */
   --secondary-foreground: oklch(1 0 0); /* #ffffff - White text on secondary */
   --muted: oklch(0.985 0 0); /* #f8fafc - Subtle muted backgrounds */
   --muted-foreground: oklch(0.556 0 0); /* #6b7280 - Muted text color */
-  --accent: oklch(0.488 0.243 264.376); /* #6366f1 - Clean blue for highlights */
+  --accent: oklch(
+    0.488 0.243 264.376
+  ); /* #6366f1 - Clean blue for highlights */
   --accent-foreground: oklch(1 0 0); /* #ffffff - White text on accent */
   --destructive: oklch(0.577 0.245 27.325); /* #ef4444 - Soft red for errors */
-  --destructive-foreground: oklch(1 0 0); /* #ffffff - White text on destructive */
+  --destructive-foreground: oklch(
+    1 0 0
+  ); /* #ffffff - White text on destructive */
   --border: oklch(0.922 0 0); /* #e5e7eb - Light border color */
   --input: oklch(1 0 0); /* #ffffff - Clean input backgrounds */
-  --ring: oklch(0.488 0.243 264.376 / 0.5); /* #6366f1 with opacity - Focus ring */
+  --ring: oklch(
+    0.488 0.243 264.376 / 0.5
+  ); /* #6366f1 with opacity - Focus ring */
   --chart-1: oklch(0.488 0.243 264.376); /* #6366f1 - Professional blue */
   --chart-2: oklch(0.627 0.265 303.9); /* #10b981 - Green */
   --chart-3: oklch(0.577 0.245 27.325); /* #ef4444 - Red */
@@ -33,11 +41,17 @@
   --sidebar: oklch(0.985 0 0); /* #f8fafc - Subtle sidebar background */
   --sidebar-foreground: oklch(0.205 0 0); /* #1f2937 - Sidebar text */
   --sidebar-primary: oklch(0.269 0 0); /* #374151 - Primary sidebar elements */
-  --sidebar-primary-foreground: oklch(1 0 0); /* #ffffff - Text on primary sidebar */
+  --sidebar-primary-foreground: oklch(
+    1 0 0
+  ); /* #ffffff - Text on primary sidebar */
   --sidebar-accent: oklch(0.488 0.243 264.376); /* #6366f1 - Sidebar accent */
-  --sidebar-accent-foreground: oklch(1 0 0); /* #ffffff - Text on sidebar accent */
+  --sidebar-accent-foreground: oklch(
+    1 0 0
+  ); /* #ffffff - Text on sidebar accent */
   --sidebar-border: oklch(0.922 0 0); /* #e5e7eb - Sidebar border */
-  --sidebar-ring: oklch(0.488 0.243 264.376 / 0.5); /* #6366f1 with opacity - Sidebar focus ring */
+  --sidebar-ring: oklch(
+    0.488 0.243 264.376 / 0.5
+  ); /* #6366f1 with opacity - Sidebar focus ring */
 }
 
 .dark {

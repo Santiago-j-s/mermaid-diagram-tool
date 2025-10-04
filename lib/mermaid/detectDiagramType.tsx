@@ -1,6 +1,6 @@
 "use client";
 export const detectDiagramType = (
-  code: string
+  code: string,
 ): "flowchart" | "sequence" | "journey" | "unknown" => {
   const trimmedCode = code.trim().toLowerCase();
 

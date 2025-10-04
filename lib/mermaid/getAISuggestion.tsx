@@ -3,7 +3,7 @@ export const getAISuggestion = async (
   error: string,
   code: string,
   diagramType: string,
-  lineNumber?: number
+  lineNumber?: number,
 ): Promise<string> => {
   try {
     const response = await fetch("/api/suggest-fix", {

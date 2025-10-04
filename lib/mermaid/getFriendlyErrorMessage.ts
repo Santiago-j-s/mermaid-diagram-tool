@@ -2,7 +2,7 @@ import { referenceData } from "./examples";
 
 export const getFriendlyErrorMessage = (
   error: string,
-  diagramType: "flowchart" | "sequence" | "journey" | "unknown" = "unknown"
+  diagramType: "flowchart" | "sequence" | "journey" | "unknown" = "unknown",
 ): { message: string; suggestion: string; lineNumber?: number } => {
   const lowerError = error.toLowerCase();
   const originalError = error;

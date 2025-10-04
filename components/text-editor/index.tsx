@@ -6,13 +6,14 @@ import { options } from "./options";
 import { tokens } from "./tokens";
 import { Code, Zap } from "lucide-react";
 import { Card } from "../ui/card";
+import { Spinner } from "../ui/spinner";
 
 function LoadingState() {
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-muted/20 rounded-lg">
       <div className="text-center">
         <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
-          <Zap className="w-6 h-6 animate-pulse text-accent" />
+          <Spinner className="w-6 h-6 animate-pulse text-accent" />
         </div>
         <p className="text-sm text-muted-foreground font-medium">
           Loading editor...

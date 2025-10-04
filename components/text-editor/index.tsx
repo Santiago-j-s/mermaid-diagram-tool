@@ -65,10 +65,20 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
         </div>
         <div className="flex items-center gap-2 ">
           <ButtonGroup>
-            <Button variant="outline" size="sm" onClick={undo}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={undo}
+              disabled={!editorRef.current?.getModel()?.canUndo()}
+            >
               <Undo2 className="w-4 h-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={redo}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={redo}
+              disabled={!editorRef.current?.getModel()?.canRedo()}
+            >
               <Redo2 className="w-4 h-4" />
             </Button>
           </ButtonGroup>
@@ -76,7 +86,8 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
             variant="outline"
             size="sm"
             onClick={() => copyToClipboard(value)}
-            className="gap-2 "
+            disabled={!value}
+            className="gap-2"
             aria-label="Copy to clipboard"
           >
             <Copy className="w-4 h-4" />

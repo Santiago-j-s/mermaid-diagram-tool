@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Download, Eye, Code, Zap, BookOpen } from "lucide-react";
+import {  Download, Eye, Zap, BookOpen } from "lucide-react";
 import { TextEditor } from "@/components/text-editor";
 import { ReferencePanel } from "@/components/reference-panel";
 import { defaultDiagram, exampleDiagrams } from "@/lib/mermaid/examples";
@@ -334,18 +334,6 @@ export default function MermaidEditor() {
     }
   };
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      toast.success("Copied!", {
-        description: "Diagram code copied to clipboard",
-      });
-    } catch (err) {
-      toast.error("Failed to copy", {
-        description: "Could not copy to clipboard",
-      });
-    }
-  };
 
   const downloadSVG = () => {
     if (!documentReady) return;
@@ -479,16 +467,8 @@ export default function MermaidEditor() {
                     </Button>
                   ))}
                 </div>
-                <div className="flex items-center justify-end gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={copyToClipboard}
-                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
-                  >
-                    <Copy className="w-4 h-4" />
-                    Copy
-                  </Button>
+                <div className="flex items-center justify-end">
+
                   <Button
                     variant="outline"
                     size="sm"

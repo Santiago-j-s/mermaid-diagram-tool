@@ -30,8 +30,7 @@ export default function MermaidEditor() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
   const mermaidRef = useRef<any>(null);
-  const initTimeoutRef = useRef<NodeJS.Timeout>();
-
+  const initTimeoutRef = useRef<NodeJS.Timeout>(null);
 
   useEffect(() => {
     const checkDocumentReady = () => {
@@ -421,8 +420,13 @@ export default function MermaidEditor() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-3">
-                    <Image src="logo.svg" alt="Mermaid Wave" width={50} height={50} />
-   
+                    <Image
+                      src="/logo.svg"
+                      alt="Mermaid Wave"
+                      width={50}
+                      height={50}
+                    />
+
                     <div>
                       <h1 className="text-xl font-semibold text-foreground tracking-tight">
                         Mermaid Wave
@@ -500,24 +504,7 @@ export default function MermaidEditor() {
 
               <div className="flex-1 flex flex-col gap-8">
                 <div className="grid gap-8 flex-1 lg:grid-cols-2">
-                  <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-                    <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
-                      <div className="flex items-center gap-2">
-                        <Code className="w-4 h-4 text-slate-600" />
-                        <span className="text-sm font-medium text-slate-700">
-                          Editor
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-0 h-[calc(100vh-320px)] flex flex-col">
-                      <TextEditor
-                        value={code}
-                        onChange={setCode}
-                        className="flex-1"
-                      />
-                    </div>
-                  </Card>
-
+                  <TextEditor value={code} onChange={setCode} />
                   <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
                     <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
                       <div className="flex items-center gap-2">

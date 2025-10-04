@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BookOpen, ChevronDown, ChevronRight } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { referenceData } from "@/lib/mermaid/examples";
+import { toast } from "sonner";
 
 interface ReferencePanelProps {
   onLoadExample: (code: string) => void;
@@ -17,7 +17,6 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({});
-  const { toast } = useToast();
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({
@@ -28,8 +27,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
 
   const loadReferenceExample = (example: string) => {
     onLoadExample(example);
-    toast({
-      title: "Example loaded",
+    toast.success("Example loaded", {
       description: "Reference example loaded into editor",
     });
   };

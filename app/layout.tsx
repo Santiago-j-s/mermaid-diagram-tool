@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         {children}
-        <Toaster />
+        <Toaster richColors />
         <Analytics />
       </body>
     </html>

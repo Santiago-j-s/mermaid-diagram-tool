@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Download, Eye, Code, Zap, BookOpen } from "lucide-react";
+import {  Download, Eye, Zap, BookOpen } from "lucide-react";
 import { TextEditor } from "@/components/text-editor";
 import { ReferencePanel } from "@/components/reference-panel";
 import { defaultDiagram, exampleDiagrams } from "@/lib/mermaid/examples";
@@ -30,8 +30,7 @@ export default function MermaidEditor() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
   const mermaidRef = useRef<any>(null);
-  const initTimeoutRef = useRef<NodeJS.Timeout>();
-
+  const initTimeoutRef = useRef<NodeJS.Timeout>(null);
 
   useEffect(() => {
     const checkDocumentReady = () => {
@@ -335,18 +334,6 @@ export default function MermaidEditor() {
     }
   };
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      toast.success("Copied!", {
-        description: "Diagram code copied to clipboard",
-      });
-    } catch (err) {
-      toast.error("Failed to copy", {
-        description: "Could not copy to clipboard",
-      });
-    }
-  };
 
   const downloadSVG = () => {
     if (!documentReady) return;
@@ -421,8 +408,13 @@ export default function MermaidEditor() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-3">
-                    <Image src="logo.svg" alt="Mermaid Wave" width={50} height={50} />
-   
+                    <Image
+                      src="/logo.svg"
+                      alt="Mermaid Wave"
+                      width={50}
+                      height={50}
+                    />
+
                     <div>
                       <h1 className="text-xl font-semibold text-foreground tracking-tight">
                         Mermaid Wave
@@ -475,16 +467,8 @@ export default function MermaidEditor() {
                     </Button>
                   ))}
                 </div>
-                <div className="flex items-center justify-end gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={copyToClipboard}
-                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
-                  >
-                    <Copy className="w-4 h-4" />
-                    Copy
-                  </Button>
+                <div className="flex items-center justify-end">
+
                   <Button
                     variant="outline"
                     size="sm"
@@ -500,24 +484,7 @@ export default function MermaidEditor() {
 
               <div className="flex-1 flex flex-col gap-8">
                 <div className="grid gap-8 flex-1 lg:grid-cols-2">
-                  <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-                    <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
-                      <div className="flex items-center gap-2">
-                        <Code className="w-4 h-4 text-slate-600" />
-                        <span className="text-sm font-medium text-slate-700">
-                          Editor
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-0 h-[calc(100vh-320px)] flex flex-col">
-                      <TextEditor
-                        value={code}
-                        onChange={setCode}
-                        className="flex-1"
-                      />
-                    </div>
-                  </Card>
-
+                  <TextEditor value={code} onChange={setCode} />
                   <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
                     <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
                       <div className="flex items-center gap-2">

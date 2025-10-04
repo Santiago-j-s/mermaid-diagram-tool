@@ -12,6 +12,12 @@ import { defaultDiagram, exampleDiagrams } from "@/lib/mermaid/examples";
 import { getFriendlyErrorMessage } from "@/lib/mermaid/getFriendlyErrorMessage";
 import { getAISuggestion } from "../lib/mermaid/getAISuggestion";
 import { detectDiagramType } from "../lib/mermaid/detectDiagramType";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarInset,
+} from "@/components/ui/sidebar";
 
 export default function MermaidEditor() {
   const [code, setCode] = useState(defaultDiagram);
@@ -19,8 +25,8 @@ export default function MermaidEditor() {
   const [error, setError] = useState<string | null>(null);
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
   const [isLoadingSuggestion, setIsLoadingSuggestion] = useState(false);
-  const [showReference, setShowReference] = useState(false);
   const [documentReady, setDocumentReady] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
   const mermaidRef = useRef<any>(null);
   const initTimeoutRef = useRef<NodeJS.Timeout>();
@@ -91,11 +97,11 @@ export default function MermaidEditor() {
         window.removeEventListener("load", handleLoad);
         document.removeEventListener(
           "DOMContentLoaded",
-          handleDOMContentLoaded
+          handleDOMContentLoaded,
         );
         document.removeEventListener(
           "readystatechange",
-          handleReadyStateChange
+          handleReadyStateChange,
         );
       }
       clearInterval(pollInterval);
@@ -115,7 +121,7 @@ export default function MermaidEditor() {
         // Additional safety check
         if (!document.head || !document.body) {
           console.warn(
-            "[v0] Document head or body still not available, retrying..."
+            "[v0] Document head or body still not available, retrying...",
           );
           initTimeoutRef.current = setTimeout(initMermaid, 500);
           return;
@@ -195,7 +201,7 @@ export default function MermaidEditor() {
       try {
         if (document.querySelectorAll) {
           const existingErrors = document.querySelectorAll(
-            '[id^="mermaid-"], .mermaid-error, .error, [class*="error"]'
+            '[id^="mermaid-"], .mermaid-error, .error, [class*="error"]',
           );
           existingErrors.forEach((el) => {
             if (
@@ -243,7 +249,7 @@ export default function MermaidEditor() {
                   ) {
                     if (
                       el.textContent.includes(
-                        "Syntax error in text mermaid version"
+                        "Syntax error in text mermaid version",
                       ) ||
                       el.textContent.includes("mermaid version")
                     ) {
@@ -270,7 +276,7 @@ export default function MermaidEditor() {
       const diagramType = detectDiagramType(code);
       const friendlyError = getFriendlyErrorMessage(
         err.message || "Unknown error",
-        diagramType
+        diagramType,
       );
       setError(friendlyError.message);
 
@@ -279,7 +285,7 @@ export default function MermaidEditor() {
         err.message || "Unknown error",
         code,
         diagramType,
-        friendlyError.lineNumber
+        friendlyError.lineNumber,
       ).then((suggestion) => {
         setAiSuggestion(suggestion);
         setIsLoadingSuggestion(false);
@@ -299,8 +305,8 @@ export default function MermaidEditor() {
             </div>
             <div class="space-y-2">
               <p class="text-sm text-red-600 font-medium">${lineNumberDisplay}${
-        friendlyError.message
-      }</p>
+                friendlyError.message
+              }</p>
               <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <div class="flex items-start gap-2">
                   <div class="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -414,220 +420,162 @@ export default function MermaidEditor() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-accent/10 rounded-lg">
-                  <Zap className="w-5 h-5 text-accent" />
+    <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col w-full">
+        <SidebarInset>
+          <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+            <div className="container mx-auto px-6 py-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-accent/10 rounded-lg">
+                      <Zap className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                        Mermaid Wave
+                      </h1>
+                      <p className="text-sm text-muted-foreground">
+                        Live Mermaid editor with AI suggestions and syntax
+                        validation
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-xl font-semibold text-foreground tracking-tight">
-                    Mermaid Editor
-                  </h1>
-                  <p className="text-sm text-muted-foreground">
-                    Professional diagram creation
-                  </p>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                    Cheatsheet
+                  </Button>
                 </div>
               </div>
-              <Badge
-                variant="secondary"
-                className="text-xs font-medium px-2 py-1"
-              >
-                Interactive
-              </Badge>
             </div>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowReference(!showReference)}
-                className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
-              >
-                <BookOpen className="w-4 h-4" />
-                Reference
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={copyToClipboard}
-                className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
-              >
-                <Copy className="w-4 h-4" />
-                Copy
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={downloadSVG}
-                disabled={!!error}
-                className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                <Download className="w-4 h-4" />
-                Download SVG
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      <main className="flex-1 flex flex-col">
-        <div className="container mx-auto px-6 py-8 flex-1 flex flex-col gap-8">
-          <div>
-            <div className="flex items-center justify-between mb-4">
+          <main className="flex-1 flex flex-col">
+            <div className="container mx-auto px-6 py-8 flex-1 flex flex-col gap-8">
               <div>
-                <h2 className="text-lg font-semibold text-foreground">
-                  Quick Examples
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Get started with these diagram templates
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3 flex-wrap">
-              {exampleDiagrams.map((example) => (
-                <Button
-                  key={example.name}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => loadExample(example)}
-                  className="text-sm font-medium bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground transition-all duration-200"
-                >
-                  {example.name}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex-1 flex flex-col gap-8">
-            <div
-              className={`grid gap-8 flex-1 ${
-                showReference ? "lg:grid-cols-3" : "lg:grid-cols-2"
-              }`}
-            >
-              {showReference && (
-                <ReferencePanel onLoadExample={loadReferenceExample} />
-              )}
-
-              <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-                <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
-                  <div className="flex items-center gap-2">
-                    <Code className="w-4 h-4 text-slate-600" />
-                    <span className="text-sm font-medium text-slate-700">
-                      Editor
-                    </span>
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 className="text-lg font-semibold text-foreground">
+                      Not sure where to start?{" "}
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      Get started with these diagram templates
+                    </p>
                   </div>
                 </div>
-                <div className="p-0 h-[calc(100vh-320px)] flex flex-col">
-                  <TextEditor
-                    value={code}
-                    onChange={setCode}
-                    className="flex-1"
-                  />
-                </div>
-              </Card>
-
-              <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-                <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
-                  <div className="flex items-center gap-2">
-                    <Eye className="w-4 h-4 text-slate-600" />
-                    <span className="text-sm font-medium text-slate-700">
-                      Preview
-                    </span>
-                  </div>
-                  {error && (
-                    <Badge
-                      variant="destructive"
-                      className="text-xs ml-auto font-medium"
+                <div className="flex gap-3 flex-wrap">
+                  {exampleDiagrams.map((example) => (
+                    <Button
+                      key={example.name}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => loadExample(example)}
+                      className="text-sm font-medium bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground transition-all duration-200"
                     >
-                      Error
-                    </Badge>
-                  )}
+                      {example.name}
+                    </Button>
+                  ))}
                 </div>
-                <div className="flex-1 p-6 overflow-auto bg-background">
-                  {isLoading ? (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="text-center">
-                        <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
-                          <Zap className="w-6 h-6 animate-pulse text-accent" />
-                        </div>
-                        <p className="text-sm text-muted-foreground font-medium">
-                          Loading renderer...
-                        </p>
+                <div className="flex items-center justify-end gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={copyToClipboard}
+                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
+                  >
+                    <Copy className="w-4 h-4" />
+                    Copy
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={downloadSVG}
+                    disabled={!!error}
+                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download SVG
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col gap-8">
+                <div className="grid gap-8 flex-1 lg:grid-cols-2">
+                  <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
+                    <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
+                      <div className="flex items-center gap-2">
+                        <Code className="w-4 h-4 text-slate-600" />
+                        <span className="text-sm font-medium text-slate-700">
+                          Editor
+                        </span>
                       </div>
                     </div>
-                  ) : (
-                    <div
-                      ref={previewRef}
-                      className="w-full h-full flex items-center justify-center"
-                      style={{ minHeight: "400px" }}
-                    />
-                  )}
-                </div>
-              </Card>
-            </div>
+                    <div className="p-0 h-[calc(100vh-320px)] flex flex-col">
+                      <TextEditor
+                        value={code}
+                        onChange={setCode}
+                        className="flex-1"
+                      />
+                    </div>
+                  </Card>
 
-            {!showReference && (
-              <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="font-semibold text-sm text-foreground">
-                        Quick Reference
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        Essential syntax patterns
-                      </p>
+                  <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
+                    <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
+                      <div className="flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-slate-600" />
+                        <span className="text-sm font-medium text-slate-700">
+                          Preview
+                        </span>
+                      </div>
+                      {error && (
+                        <Badge
+                          variant="destructive"
+                          className="text-xs ml-auto font-medium"
+                        >
+                          Error
+                        </Badge>
+                      )}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowReference(true)}
-                      className="text-xs gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white text-foreground"
-                    >
-                      <BookOpen className="w-3 h-3" />
-                      View Full Reference
-                    </Button>
-                  </div>
-                  <div className="grid md:grid-cols-3 gap-6 text-sm">
-                    <div className="space-y-2">
-                      <p className="font-semibold text-foreground">Flowchart</p>
-                      <code className="bg-muted/50 px-2 py-1 rounded text-xs font-mono">
-                        graph TD
-                      </code>
-                      <p className="text-muted-foreground text-xs">
-                        A --&gt; B: Decision
-                      </p>
+                    <div className="flex-1 p-6 overflow-auto bg-background">
+                      {isLoading ? (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="text-center">
+                            <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
+                              <Zap className="w-6 h-6 animate-pulse text-accent" />
+                            </div>
+                            <p className="text-sm text-muted-foreground font-medium">
+                              Loading renderer...
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          ref={previewRef}
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ minHeight: "400px" }}
+                        />
+                      )}
                     </div>
-                    <div className="space-y-2">
-                      <p className="font-semibold text-foreground">Sequence</p>
-                      <code className="bg-muted/50 px-2 py-1 rounded text-xs font-mono">
-                        sequenceDiagram
-                      </code>
-                      <p className="text-muted-foreground text-xs">
-                        A-&gt;&gt;B: Message
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="font-semibold text-foreground">
-                        User Journey
-                      </p>
-                      <code className="bg-muted/50 px-2 py-1 rounded text-xs font-mono">
-                        journey
-                      </code>
-                      <p className="text-muted-foreground text-xs">
-                        Task: 5: User
-                      </p>
-                    </div>
-                  </div>
+                  </Card>
                 </div>
-              </Card>
-            )}
-          </div>
-        </div>
-      </main>
-    </div>
+              </div>
+            </div>
+          </main>
+        </SidebarInset>
+      </div>
+
+      <Sidebar side="right" collapsible="offcanvas">
+        <SidebarContent>
+          <ReferencePanel onLoadExample={loadReferenceExample} />
+        </SidebarContent>
+      </Sidebar>
+    </SidebarProvider>
   );
 }

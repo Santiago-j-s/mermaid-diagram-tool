@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BookOpen, ChevronDown, ChevronRight } from "lucide-react";
@@ -36,8 +35,8 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
   };
 
   return (
-    <Card className="flex flex-col shadow-sm border-border/50 bg-card/50">
-      <div className="flex items-center gap-3 p-3 border-b border-border/50 bg-muted/30">
+    <div className="flex flex-col h-full">
+      <div className="flex items-center gap-3 p-4 border-b border-border/50">
         <div className="p-1.5 bg-accent/10 rounded-md">
           <BookOpen className="w-4 h-4 text-accent" />
         </div>
@@ -46,7 +45,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
         </span>
       </div>
       <div className="flex-1 overflow-auto">
-        <div className="p-5 border-b border-border/30">
+        <div className="p-4 border-b border-border/30">
           <div className="grid grid-cols-2 gap-2">
             {Object.entries(referenceData).map(([key, data]) => (
               <Button
@@ -127,6 +126,6 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

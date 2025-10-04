@@ -19,9 +19,13 @@ import {
 } from "@/components/ui/sidebar";
 import { toast } from "sonner";
 import Image from "next/image";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function MermaidEditor() {
-  const [code, setCode] = useState(defaultDiagram);
+  const [code, setCode] = useLocalStorage({
+    storageKey: "mermaid-diagram-code",
+    defaultValue: defaultDiagram,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);

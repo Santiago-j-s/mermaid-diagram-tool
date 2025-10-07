@@ -36,7 +36,6 @@ export default function MermaidEditor() {
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
   const [isLoadingSuggestion, setIsLoadingSuggestion] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date>(new Date());
   const [isFullscreen, setIsFullscreen] = useState(false);
   
@@ -61,36 +60,6 @@ export default function MermaidEditor() {
       toast.success("Downloaded!", { description: "Diagram saved as SVG file" });
     }
   }
-
-  useKeyboardShortcuts([
-    {
-      key: "s",
-      ctrl: true,
-      meta: true,
-      handler: handleExport,
-      description: "Download SVG",
-    },
-    {
-      key: "k",
-      ctrl: true,
-      meta: true,
-      handler: () => setSidebarOpen((prev) => !prev),
-      description: "Toggle cheatsheet",
-    },
-    {
-      key: "f",
-      ctrl: true,
-      shift: true,
-      handler: () => setIsFullscreen((prev) => !prev),
-      description: "Toggle fullscreen",
-    },
-    {
-      key: "/",
-      ctrl: true,
-      handler: () => setShortcutsDialogOpen(true),
-      description: "Show keyboard shortcuts",
-    },
-  ]);
 
   useEffect(() => {
     if (!isReady) return;

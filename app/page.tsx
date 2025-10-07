@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import {  Download, Eye, Zap, BookOpen } from "lucide-react";
 import { TextEditor } from "@/components/text-editor";
 import { ReferencePanel } from "@/components/reference-panel";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { defaultDiagram, exampleDiagrams } from "@/lib/mermaid/examples";
 import { getFriendlyErrorMessage } from "@/lib/mermaid/getFriendlyErrorMessage";
 import { getAISuggestion } from "../lib/mermaid/getAISuggestion";
@@ -405,9 +406,9 @@ export default function MermaidEditor() {
 
   return (
     <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col w-full">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col w-full theme-transition">
         <SidebarInset>
-          <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+          <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50 theme-transition">
             <div className="container mx-auto px-6 py-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -431,15 +432,16 @@ export default function MermaidEditor() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground"
-                  >
-                    <BookOpen className="w-4 h-4" />
-                    Cheatsheet
-                  </Button>
+                  <ThemeToggle />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSidebarOpen(!sidebarOpen)}
+                      className="gap-2 theme-transition"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      Cheatsheet
+                    </Button>
                 </div>
               </div>
             </div>
@@ -465,7 +467,7 @@ export default function MermaidEditor() {
                       variant="outline"
                       size="sm"
                       onClick={() => loadExample(example)}
-                      className="text-sm font-medium bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground transition-all duration-200"
+                      className="theme-transition"
                     >
                       {example.name}
                     </Button>
@@ -478,7 +480,7 @@ export default function MermaidEditor() {
                     size="sm"
                     onClick={downloadSVG}
                     disabled={!!error}
-                    className="gap-2 bg-muted/20 hover:bg-slate-600 hover:text-white border-border text-foreground disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="gap-2 theme-transition"
                   >
                     <Download className="w-4 h-4" />
                     Download SVG
@@ -489,11 +491,11 @@ export default function MermaidEditor() {
               <div className="flex-1 flex flex-col gap-8">
                 <div className="grid gap-8 flex-1 lg:grid-cols-2">
                   <TextEditor value={code} onChange={setCode} />
-                  <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-                    <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
+                  <Card className="bg-card/80 backdrop-blur-sm border-border/60 shadow-lg theme-transition">
+                    <div className="flex items-center justify-between px-3 py-2 border-b border-border/60 bg-muted/50 theme-transition">
                       <div className="flex items-center gap-2">
-                        <Eye className="w-4 h-4 text-slate-600" />
-                        <span className="text-sm font-medium text-slate-700">
+                        <Eye className="w-4 h-4 text-foreground/70" />
+                        <span className="text-sm font-medium text-foreground">
                           Preview
                         </span>
                       </div>
@@ -506,7 +508,7 @@ export default function MermaidEditor() {
                         </Badge>
                       )}
                     </div>
-                    <div className="flex-1 p-6 overflow-auto bg-background">
+                    <div className="flex-1 p-6 overflow-auto bg-background theme-transition">
                       {isLoading ? (
                         <div className="flex items-center justify-center h-full">
                           <div className="text-center">

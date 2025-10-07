@@ -437,7 +437,7 @@ export default function MermaidEditor() {
                       variant="outline"
                       size="sm"
                       onClick={() => setSidebarOpen(!sidebarOpen)}
-                      className="gap-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground border-border text-foreground theme-transition"
+                      className="gap-2 theme-transition"
                     >
                       <BookOpen className="w-4 h-4" />
                       Cheatsheet
@@ -467,7 +467,7 @@ export default function MermaidEditor() {
                       variant="outline"
                       size="sm"
                       onClick={() => loadExample(example)}
-                      className="text-sm font-medium bg-muted/20 hover:bg-primary hover:text-primary-foreground border-border text-foreground theme-transition transition-all duration-200"
+                      className="theme-transition"
                     >
                       {example.name}
                     </Button>
@@ -480,7 +480,7 @@ export default function MermaidEditor() {
                     size="sm"
                     onClick={downloadSVG}
                     disabled={!!error}
-                    className="gap-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground border-border text-foreground disabled:opacity-60 disabled:cursor-not-allowed theme-transition"
+                    className="gap-2 theme-transition"
                   >
                     <Download className="w-4 h-4" />
                     Download SVG

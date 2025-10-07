@@ -18,7 +18,7 @@ export function ThemeToggle() {
       variant="outline"
       size="sm"
       onClick={handleToggle}
-      className="relative w-9 h-9 p-0 bg-muted/20 hover:bg-primary hover:text-primary-foreground border-border theme-transition"
+      className="relative w-9 h-9 p-0 theme-transition"
     >
       <Sun 
         className={`h-4 w-4 absolute transition-transform duration-200 ${

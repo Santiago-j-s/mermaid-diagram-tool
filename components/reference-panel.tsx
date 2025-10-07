@@ -27,8 +27,8 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
 
   const loadReferenceExample = (example: string) => {
     onLoadExample(example);
-    toast.success("Example loaded", {
-      description: "Reference example loaded into editor",
+    toast.success("Example Loaded", {
+      description: "Code example has been inserted into the editor",
     });
   };
 
@@ -39,7 +39,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
           <BookOpen className="w-4 h-4 text-accent" />
         </div>
         <span className="font-semibold text-sm text-foreground">
-          Reference Guide
+          Syntax Reference
         </span>
       </div>
       <div className="flex-1 overflow-auto">
@@ -115,7 +115,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 }
                 className="text-xs h-6 px-2 theme-transition"
               >
-                Load
+                Insert Example
               </Button>
             </div>
             <pre className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto theme-transition">

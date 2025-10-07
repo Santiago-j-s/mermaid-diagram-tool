@@ -18,31 +18,31 @@ export function ExportMenu({ getSvgElement, disabled }: ExportMenuProps) {
   const handleExportSVG = () => {
     const svgElement = getSvgElement();
     if (!svgElement) {
-      toast.error("Export failed", { description: "No diagram to export" });
+      toast.error("Export Failed", { description: "Please create a valid diagram before exporting" });
       return;
     }
 
     try {
       exportToSVG(svgElement);
-      toast.success("Downloaded!", { description: "Diagram saved as SVG file" });
+      toast.success("Export Complete", { description: "Your diagram has been saved as an SVG file" });
     } catch (err) {
-      toast.error("Export failed", { description: "Could not download SVG file" });
+      toast.error("Export Failed", { description: "Unable to export diagram. Please try again" });
     }
   };
 
   const handleExportPNG = async () => {
     const svgElement = getSvgElement();
     if (!svgElement) {
-      toast.error("Export failed", { description: "No diagram to export" });
+      toast.error("Export Failed", { description: "Please create a valid diagram before exporting" });
       return;
     }
 
     setIsExporting(true);
     try {
       await exportToPNG(svgElement);
-      toast.success("Downloaded!", { description: "Diagram saved as PNG file" });
+      toast.success("Export Complete", { description: "Your diagram has been saved as a PNG file" });
     } catch (err) {
-      toast.error("Export failed", { description: "Could not download PNG file" });
+      toast.error("Export Failed", { description: "Unable to export diagram. Please try again" });
     } finally {
       setIsExporting(false);
     }
@@ -58,7 +58,7 @@ export function ExportMenu({ getSvgElement, disabled }: ExportMenuProps) {
         className="gap-2 theme-transition"
       >
         <FileCode className="w-4 h-4" />
-        SVG
+        Export SVG
       </Button>
       <Button
         variant="outline"
@@ -68,7 +68,7 @@ export function ExportMenu({ getSvgElement, disabled }: ExportMenuProps) {
         className="gap-2 theme-transition"
       >
         <FileImage className="w-4 h-4" />
-        PNG
+        Export PNG
       </Button>
     </ButtonGroup>
   );

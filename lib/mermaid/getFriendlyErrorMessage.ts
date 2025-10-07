@@ -41,11 +41,11 @@ export const getFriendlyErrorMessage = (
   ) {
     return {
       message: lineNumber
-        ? `Missing closing bracket at line ${lineNumber}`
+        ? `Missing closing bracket on line ${lineNumber}`
         : "Missing closing bracket",
       suggestion: lineNumber
-        ? `Fix line ${lineNumber}: Add the missing closing bracket. Use [Text], (Text), {Text}, or ((Text)) for different node shapes`
-        : "Add the missing closing bracket. Use [Text], (Text), {Text}, or ((Text)) for different node shapes",
+        ? `Review line ${lineNumber}: Ensure brackets are properly closed. Use [Text] for rectangles, (Text) for rounded corners, {Text} for diamonds, or ((Text)) for circles`
+        : "Ensure all brackets are properly closed. Use [Text] for rectangles, (Text) for rounded corners, {Text} for diamonds, or ((Text)) for circles",
       lineNumber,
     };
   }
@@ -53,11 +53,11 @@ export const getFriendlyErrorMessage = (
   if (lowerError.includes("brkt") || lowerError.includes("bracket")) {
     return {
       message: lineNumber
-        ? `Bracket mismatch at line ${lineNumber}`
-        : "Bracket mismatch in flowchart",
+        ? `Bracket mismatch on line ${lineNumber}`
+        : "Bracket mismatch detected",
       suggestion: lineNumber
-        ? `Fix line ${lineNumber}: Match brackets correctly: [Rectangle], (Rounded), {Diamond}, ((Circle))`
-        : "Match brackets: [Rectangle], (Rounded), {Diamond}, ((Circle))",
+        ? `Review line ${lineNumber}: Ensure brackets match correctly: [Rectangle], (Rounded), {Diamond}, ((Circle))`
+        : "Ensure brackets match correctly: [Rectangle], (Rounded), {Diamond}, ((Circle))",
       lineNumber,
     };
   }
@@ -75,11 +75,11 @@ export const getFriendlyErrorMessage = (
   ) {
     return {
       message: lineNumber
-        ? `Connection syntax error at line ${lineNumber}`
-        : "Connection syntax error",
+        ? `Connection syntax error on line ${lineNumber}`
+        : "Connection syntax error detected",
       suggestion: lineNumber
-        ? `Fix line ${lineNumber}: Use proper arrow syntax like A --> B, A --- B, or A -.-> B for connections`
-        : "Use proper arrow syntax: A --> B, A --- B, or A -.-> B for connections",
+        ? `Review line ${lineNumber}: Use proper arrow syntax such as A --> B, A --- B, or A -.-> B for connections`
+        : "Use proper arrow syntax such as A --> B, A --- B, or A -.-> B for connections",
       lineNumber,
     };
   }
@@ -100,11 +100,11 @@ export const getFriendlyErrorMessage = (
       ) {
         return {
           message: lineNumber
-            ? `Incomplete bracket or node definition at line ${lineNumber}`
+            ? `Incomplete bracket or node definition on line ${lineNumber}`
             : "Incomplete bracket or node definition",
           suggestion: lineNumber
-            ? `Check line ${lineNumber}: Make sure all brackets are properly closed: [Rectangle], (Rounded), {Diamond}, ((Circle))`
-            : "Make sure all brackets are properly closed: [Rectangle], (Rounded), {Diamond}, ((Circle))",
+            ? `Review line ${lineNumber}: Ensure all brackets are properly closed: [Rectangle], (Rounded), {Diamond}, ((Circle))`
+            : "Ensure all brackets are properly closed: [Rectangle], (Rounded), {Diamond}, ((Circle))",
           lineNumber,
         };
       }
@@ -112,31 +112,31 @@ export const getFriendlyErrorMessage = (
       if (diagramType === "sequence") {
         return {
           message: lineNumber
-            ? `Incomplete sequence diagram at line ${lineNumber}`
+            ? `Incomplete sequence diagram on line ${lineNumber}`
             : "Incomplete sequence diagram",
           suggestion: lineNumber
-            ? `Check line ${lineNumber}: Make sure all messages have proper format: A->>B: Message text`
-            : "Make sure all messages have proper format: A->>B: Message text",
+            ? `Review line ${lineNumber}: Ensure all messages follow the format A->>B: Message text`
+            : "Ensure all messages follow the format A->>B: Message text",
           lineNumber,
         };
       } else if (diagramType === "journey") {
         return {
           message: lineNumber
-            ? `Incomplete user journey at line ${lineNumber}`
+            ? `Incomplete user journey on line ${lineNumber}`
             : "Incomplete user journey",
           suggestion: lineNumber
-            ? `Check line ${lineNumber}: Ensure all tasks follow format: Task Name: Score: Actor`
-            : "Ensure all tasks follow format: Task Name: Score: Actor",
+            ? `Review line ${lineNumber}: Ensure all tasks follow the format Task Name: Score: Actor`
+            : "Ensure all tasks follow the format Task Name: Score: Actor",
           lineNumber,
         };
       } else {
         return {
           message: lineNumber
-            ? `Connection issue at line ${lineNumber}`
-            : "Connection issue",
+            ? `Connection issue detected on line ${lineNumber}`
+            : "Connection issue detected",
           suggestion: lineNumber
-            ? `Check line ${lineNumber}: Use proper arrow syntax like A --> B for connections`
-            : "Use proper arrow syntax: A --> B for connections",
+            ? `Review line ${lineNumber}: Use proper arrow syntax such as A --> B for connections`
+            : "Use proper arrow syntax such as A --> B for connections",
           lineNumber,
         };
       }
@@ -146,21 +146,21 @@ export const getFriendlyErrorMessage = (
       if (diagramType === "sequence") {
         return {
           message: lineNumber
-            ? `Missing colon in sequence message at line ${lineNumber}`
+            ? `Missing colon in sequence message on line ${lineNumber}`
             : "Missing colon in sequence message",
           suggestion: lineNumber
-            ? `Fix line ${lineNumber}: Use format A->>B: Your message text (colon after arrow)`
-            : "Use format: A->>B: Your message text (colon after arrow)",
+            ? `Review line ${lineNumber}: Use the format A->>B: Your message text (colon required after arrow)`
+            : "Use the format A->>B: Your message text (colon required after arrow)",
           lineNumber,
         };
       } else if (diagramType === "journey") {
         return {
           message: lineNumber
-            ? `Missing colon in journey task at line ${lineNumber}`
+            ? `Missing colon in journey task on line ${lineNumber}`
             : "Missing colon in journey task",
           suggestion: lineNumber
-            ? `Fix line ${lineNumber}: Use format Task Name: Score: Actor (two colons needed)`
-            : "Use format: Task Name: Score: Actor (two colons needed)",
+            ? `Review line ${lineNumber}: Use the format Task Name: Score: Actor (two colons required)`
+            : "Use the format Task Name: Score: Actor (two colons required)",
           lineNumber,
         };
       }
@@ -170,11 +170,11 @@ export const getFriendlyErrorMessage = (
   if (lowerError.includes("lexical error") || lowerError.includes("invalid")) {
     return {
       message: lineNumber
-        ? `Invalid character or syntax at line ${lineNumber}`
-        : "Invalid character or syntax",
+        ? `Invalid character or syntax on line ${lineNumber}`
+        : "Invalid character or syntax detected",
       suggestion: lineNumber
-        ? `Check line ${lineNumber} for typos in ${diagramType} keywords and remove special characters`
-        : `Check for typos in ${diagramType} keywords and remove special characters`,
+        ? `Review line ${lineNumber} for typos in ${diagramType} keywords or unexpected special characters`
+        : `Review your code for typos in ${diagramType} keywords or unexpected special characters`,
       lineNumber,
     };
   }
@@ -184,10 +184,10 @@ export const getFriendlyErrorMessage = (
       if (pattern.pattern.test(originalError)) {
         return {
           message: lineNumber
-            ? `${pattern.message} at line ${lineNumber}`
+            ? `${pattern.message} on line ${lineNumber}`
             : pattern.message,
           suggestion: lineNumber
-            ? `Fix line ${lineNumber}: ${pattern.suggestion}`
+            ? `Review line ${lineNumber}: ${pattern.suggestion}`
             : pattern.suggestion,
           lineNumber,
         };
@@ -198,22 +198,22 @@ export const getFriendlyErrorMessage = (
   if (lineNumber) {
     return {
       message: `Syntax error on line ${lineNumber}`,
-      suggestion: `Check line ${lineNumber} for ${diagramType} syntax errors. Compare with the reference examples.`,
+      suggestion: `Review line ${lineNumber} for ${diagramType} syntax issues. Refer to the syntax guide for correct formatting.`,
       lineNumber,
     };
   }
 
   const diagramGuidance = {
-    flowchart: "Start with 'graph TD' and use A --> B for connections",
-    sequence: "Start with 'sequenceDiagram' and define participants first",
-    journey: "Start with 'journey' then 'title', followed by sections",
-    unknown: "Check your diagram type declaration and syntax",
+    flowchart: "Begin with 'graph TD' and use A --> B to create connections",
+    sequence: "Begin with 'sequenceDiagram' and declare participants before defining interactions",
+    journey: "Begin with 'journey' followed by a 'title', then define sections",
+    unknown: "Verify your diagram type declaration and review the syntax",
   };
 
   return {
     message: `${
       diagramType.charAt(0).toUpperCase() + diagramType.slice(1)
-    } syntax error`,
+    } syntax error detected`,
     suggestion: diagramGuidance[diagramType],
   };
 };

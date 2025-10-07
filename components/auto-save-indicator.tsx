@@ -41,7 +41,7 @@ export function AutoSaveIndicator({ lastSaved }: AutoSaveIndicatorProps) {
   return (
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
       <Cloud className="w-3 h-3" />
-      <span>Saved {timeSinceLastSave}</span>
+      <span>Auto-saved {timeSinceLastSave}</span>
       <Check className="w-3 h-3 text-green-500" />
     </div>
   );

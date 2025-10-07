@@ -57,7 +57,7 @@ export default function MermaidEditor() {
       downloadLink.click();
       document.body.removeChild(downloadLink);
       URL.revokeObjectURL(svgUrl);
-      toast.success("Downloaded!", { description: "Diagram saved as SVG file" });
+      toast.success("Export Complete", { description: "Your diagram has been saved as an SVG file" });
     }
   }
 
@@ -130,7 +130,7 @@ export default function MermaidEditor() {
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs font-medium text-blue-800 dark:text-blue-300 mb-1">💡 Quick Fix:</p>
+                  <p class="text-xs font-medium text-blue-800 dark:text-blue-300 mb-1">Suggested Fix:</p>
                   <p class="text-sm text-blue-700 dark:text-blue-400">${friendlyError.suggestion}</p>
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function MermaidEditor() {
           </div>
           ${
             isLoadingSuggestion
-              ? '<p class="text-xs text-gray-500 mt-2">Getting AI-powered suggestion...</p>'
+              ? '<p class="text-xs text-gray-500 mt-2">Analyzing your diagram...</p>'
               : aiSuggestion ? `<p class="text-xs text-gray-700 dark:text-gray-300 mt-2">${aiSuggestion}</p>` : ""
           }
         </div>
@@ -152,12 +152,12 @@ export default function MermaidEditor() {
 
   function loadExample(example: (typeof exampleDiagrams)[0]) {
     setCode(example.code);
-    toast.success("Example loaded", { description: `${example.name} diagram loaded` });
+    toast.success("Template Loaded", { description: `${example.name} template applied successfully` });
   }
 
   function loadReferenceExample(example: string) {
     setCode(example);
-    toast.success("Example loaded", { description: "Reference example loaded into editor" });
+    toast.success("Example Loaded", { description: "Code example has been inserted into the editor" });
   }
 
   if (!isReady) {
@@ -167,7 +167,7 @@ export default function MermaidEditor() {
           <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
             <div className="w-6 h-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
           </div>
-          <p className="text-sm text-muted-foreground font-medium">Preparing editor...</p>
+          <p className="text-sm text-muted-foreground font-medium">Initializing editor...</p>
         </div>
       </div>
     );
@@ -189,7 +189,7 @@ export default function MermaidEditor() {
                         Mermaid Wave
                       </h1>
                       <p className="text-sm text-muted-foreground">
-                        Live Mermaid editor with AI suggestions and syntax validation
+                        Professional diagram editor with real-time validation
                       </p>
                     </div>
                   </div>
@@ -204,7 +204,7 @@ export default function MermaidEditor() {
                     className="gap-2 theme-transition"
                   >
                     <BookOpen className="w-4 h-4" />
-                    Cheatsheet
+                    Syntax Guide
                   </Button>
                 </div>
               </div>
@@ -218,10 +218,10 @@ export default function MermaidEditor() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-lg font-semibold text-foreground">
-                      Not sure where to start?
+                      Quick Start Templates
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Get started with these diagram templates
+                      Choose a template to begin creating your diagram
                     </p>
                   </div>
                 </div>

@@ -22,7 +22,7 @@ function LoadingState() {
           <Spinner className="w-6 h-6 animate-pulse text-accent" />
         </div>
         <p className="text-sm text-muted-foreground font-medium">
-          Loading editor...
+          Initializing code editor...
         </p>
       </div>
     </div>
@@ -32,12 +32,12 @@ function LoadingState() {
 const copyToClipboard = async (code: string) => {
   try {
     await navigator.clipboard.writeText(code);
-    toast.success("Copied!", {
-      description: "Diagram code copied to clipboard",
+    toast.success("Code Copied", {
+      description: "Your diagram code has been copied to the clipboard",
     });
   } catch (err) {
-    toast.error("Failed to copy", {
-      description: "Could not copy to clipboard",
+    toast.error("Copy Failed", {
+      description: "Unable to copy code to clipboard. Please try again",
     });
   }
 };

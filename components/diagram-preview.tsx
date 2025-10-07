@@ -92,7 +92,7 @@ export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: D
               <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
                 <div className="w-6 h-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
               </div>
-              <p className="text-sm text-muted-foreground font-medium">Loading renderer...</p>
+              <p className="text-sm text-muted-foreground font-medium">Rendering diagram...</p>
             </div>
           </div>
         ) : (
@@ -108,7 +108,7 @@ export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: D
       </div>
       {!error && !isLoading && (
         <div className="px-3 py-1 border-t border-border/60 bg-muted/30 text-xs text-muted-foreground text-center">
-          {Math.round(zoom * 100)}% • Drag to pan
+          Zoom: {Math.round(zoom * 100)}% • Click and drag to pan
         </div>
       )}
     </Card>

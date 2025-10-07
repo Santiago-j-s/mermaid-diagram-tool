@@ -53,7 +53,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 onClick={() =>
                   setSelectedReference(key as keyof typeof referenceData)
                 }
-                className="text-xs justify-start h-8 bg-muted/20 hover:bg-slate-600 hover:text-white text-foreground"
+                className="text-xs justify-start h-8 bg-muted/20 hover:bg-primary hover:text-primary-foreground text-foreground transition-all duration-200"
               >
                 {data.title.split(" ")[0]}
               </Button>
@@ -79,7 +79,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
               <div key={index}>
                 <button
                   onClick={() => toggleSection(`${selectedReference}-${index}`)}
-                  className="flex items-center gap-2 w-full text-left p-2 hover:bg-slate-600 hover:text-white rounded-md transition-colors text-foreground"
+                  className="flex items-center gap-2 w-full text-left p-2 hover:bg-primary hover:text-primary-foreground rounded-md transition-all duration-200 text-foreground"
                 >
                   {expandedSections[`${selectedReference}-${index}`] ? (
                     <ChevronDown className="w-3 h-3" />
@@ -113,7 +113,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 onClick={() =>
                   loadReferenceExample(referenceData[selectedReference].example)
                 }
-                className="text-xs h-6 px-2 bg-muted/20 hover:bg-slate-600 hover:text-white text-foreground"
+                className="text-xs h-6 px-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground text-foreground transition-all duration-200"
               >
                 Load
               </Button>

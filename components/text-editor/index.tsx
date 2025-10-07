@@ -2,15 +2,16 @@
 
 import { useRef } from "react";
 import { Editor } from "@monaco-editor/react";
-import { mermaidTheme } from "./theme";
+import { mermaidLightTheme, mermaidDarkTheme } from "./theme";
 import { options } from "./options";
 import { tokens } from "./tokens";
-import { Code, Copy, Redo2, Undo2, Zap } from "lucide-react";
+import { Code, Copy, Redo2, Undo2 } from "lucide-react";
 import { Card } from "../ui/card";
 import { Spinner } from "../ui/spinner";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { ButtonGroup } from "../ui/button-group";
+import { useTheme } from "next-themes";
 import type { editor as MonacoEditor } from "monaco-editor";
 
 function LoadingState() {
@@ -47,6 +48,7 @@ interface TextEditorProps {
 
 export function TextEditor({ value, onChange }: TextEditorProps) {
   const editorRef = useRef<MonacoEditor.IStandaloneCodeEditor | null>(null);
+  const { resolvedTheme } = useTheme();
 
   function undo() {
     editorRef.current?.trigger("keyboard", "undo", null);
@@ -56,12 +58,14 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
     editorRef.current?.trigger("keyboard", "redo", null);
   }
 
+  const editorTheme = resolvedTheme === "dark" ? "mermaid-dark-theme" : "mermaid-light-theme";
+
   return (
-    <Card className="bg-white/80 backdrop-blur-sm border-slate-200/60 shadow-lg">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
+    <Card className="bg-card/80 backdrop-blur-sm border-border/60 shadow-lg transition-colors duration-300">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-border/60 bg-muted/50">
         <div className="flex items-center gap-2">
-          <Code className="w-4 h-4 text-slate-600" />
-          <span className="text-sm font-medium text-slate-700">Editor</span>
+          <Code className="w-4 h-4 text-foreground/70" />
+          <span className="text-sm font-medium text-foreground">Editor</span>
         </div>
         <div className="flex items-center gap-2 ">
           <ButtonGroup>
@@ -98,7 +102,7 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
         <Editor
           height="100%"
           defaultLanguage="mermaid"
-          theme="vs"
+          theme={editorTheme}
           value={value}
           loading={<LoadingState />}
           onMount={(editor, monaco) => {
@@ -109,10 +113,9 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
               tokenizer: { root: tokens },
             });
 
-            monaco.editor.defineTheme("mermaid-theme", mermaidTheme);
+            monaco.editor.defineTheme("mermaid-light-theme", mermaidLightTheme);
+            monaco.editor.defineTheme("mermaid-dark-theme", mermaidDarkTheme);
 
-            monaco.editor.setTheme("mermaid-theme");
-            editor.setValue(value);
             editor.onDidChangeModelContent(() => {
               onChange(editor.getValue());
             });

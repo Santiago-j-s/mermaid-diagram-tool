@@ -33,8 +33,8 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 p-4 border-b border-border/50">
+    <div className="flex flex-col h-full theme-transition">
+      <div className="flex items-center gap-3 p-4 border-b border-border/50 theme-transition">
         <div className="p-1.5 bg-accent/10 rounded-md">
           <BookOpen className="w-4 h-4 text-accent" />
         </div>
@@ -53,7 +53,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 onClick={() =>
                   setSelectedReference(key as keyof typeof referenceData)
                 }
-                className="text-xs justify-start h-8 bg-muted/20 hover:bg-primary hover:text-primary-foreground text-foreground transition-all duration-200"
+                className="text-xs justify-start h-8 bg-muted/20 hover:bg-primary hover:text-primary-foreground text-foreground theme-transition transition-all duration-200"
               >
                 {data.title.split(" ")[0]}
               </Button>
@@ -79,7 +79,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
               <div key={index}>
                 <button
                   onClick={() => toggleSection(`${selectedReference}-${index}`)}
-                  className="flex items-center gap-2 w-full text-left p-2 hover:bg-primary hover:text-primary-foreground rounded-md transition-all duration-200 text-foreground"
+                  className="flex items-center gap-2 w-full text-left p-2 hover:bg-primary hover:text-primary-foreground rounded-md theme-transition transition-all duration-200 text-foreground"
                 >
                   {expandedSections[`${selectedReference}-${index}`] ? (
                     <ChevronDown className="w-3 h-3" />
@@ -90,7 +90,7 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 </button>
                 {expandedSections[`${selectedReference}-${index}`] && (
                   <div className="ml-5 pb-2">
-                    <pre className="bg-muted p-2 rounded text-xs font-mono mb-2 overflow-x-auto">
+                    <pre className="bg-muted p-2 rounded text-xs font-mono mb-2 overflow-x-auto theme-transition">
                       <code>{item.code}</code>
                     </pre>
                     <p className="text-xs text-muted-foreground">{item.desc}</p>
@@ -113,12 +113,12 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
                 onClick={() =>
                   loadReferenceExample(referenceData[selectedReference].example)
                 }
-                className="text-xs h-6 px-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground text-foreground transition-all duration-200"
+                className="text-xs h-6 px-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground text-foreground theme-transition transition-all duration-200"
               >
                 Load
               </Button>
             </div>
-            <pre className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto">
+            <pre className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto theme-transition">
               <code>{referenceData[selectedReference].example}</code>
             </pre>
           </div>

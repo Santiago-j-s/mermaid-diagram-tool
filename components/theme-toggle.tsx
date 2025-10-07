@@ -18,10 +18,20 @@ export function ThemeToggle() {
       variant="outline"
       size="sm"
       onClick={handleToggle}
-      className="relative w-9 h-9 p-0 bg-muted/20 hover:bg-primary hover:text-primary-foreground border-border transition-all duration-300"
+      className="relative w-9 h-9 p-0 bg-muted/20 hover:bg-primary hover:text-primary-foreground border-border theme-transition"
     >
-      <Sun className={`h-4 w-4 absolute transition-all duration-300 ${isDark ? 'rotate-0 scale-100' : 'rotate-90 scale-0'}`} />
-      <Moon className={`h-4 w-4 absolute transition-all duration-300 ${isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'}`} />
+      <Sun 
+        className={`h-4 w-4 absolute transition-transform duration-200 ${
+          isDark ? 'rotate-0 scale-100' : 'rotate-90 scale-0'
+        }`} 
+        style={{ transitionProperty: 'transform' }}
+      />
+      <Moon 
+        className={`h-4 w-4 absolute transition-transform duration-200 ${
+          isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
+        }`}
+        style={{ transitionProperty: 'transform' }}
+      />
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

@@ -61,8 +61,8 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
   const editorTheme = resolvedTheme === "dark" ? "mermaid-dark-theme" : "mermaid-light-theme";
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm border-border/60 shadow-lg transition-colors duration-300">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border/60 bg-muted/50">
+    <Card className="bg-card/80 backdrop-blur-sm border-border/60 shadow-lg theme-transition">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-border/60 bg-muted/50 theme-transition">
         <div className="flex items-center gap-2">
           <Code className="w-4 h-4 text-foreground/70" />
           <span className="text-sm font-medium text-foreground">Editor</span>

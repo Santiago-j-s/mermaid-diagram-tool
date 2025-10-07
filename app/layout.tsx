@@ -25,9 +25,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Next themes has known hydration issues
   return (
     <html lang="en" suppressHydrationWarning>
-      // Next themes has known hydration issues
+
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <ThemeProvider
           attribute="data-theme"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 import { mermaidLightTheme, mermaidDarkTheme } from "./theme";
 import { options } from "./options";
@@ -48,6 +48,7 @@ interface TextEditorProps {
 
 export function TextEditor({ value, onChange }: TextEditorProps) {
   const editorRef = useRef<MonacoEditor.IStandaloneCodeEditor | null>(null);
+  const monacoRef = useRef<any>(null);
   const { resolvedTheme } = useTheme();
 
   function undo() {
@@ -59,6 +60,12 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
   }
 
   const editorTheme = resolvedTheme === "dark" ? "mermaid-dark-theme" : "mermaid-light-theme";
+
+  useEffect(() => {
+    if (monacoRef.current && editorRef.current) {
+      monacoRef.current.editor.setTheme(editorTheme);
+    }
+  }, [editorTheme]);
 
   return (
     <Card className="bg-card/80 backdrop-blur-sm border-border/60 shadow-lg theme-transition">
@@ -107,6 +114,7 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
           loading={<LoadingState />}
           onMount={(editor, monaco) => {
             editorRef.current = editor;
+            monacoRef.current = monaco;
 
             monaco.languages.register({ id: "mermaid" });
             monaco.languages.setMonarchTokensProvider("mermaid", {
@@ -115,6 +123,7 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
 
             monaco.editor.defineTheme("mermaid-light-theme", mermaidLightTheme);
             monaco.editor.defineTheme("mermaid-dark-theme", mermaidDarkTheme);
+            monaco.editor.setTheme(editorTheme);
 
             editor.onDidChangeModelContent(() => {
               onChange(editor.getValue());

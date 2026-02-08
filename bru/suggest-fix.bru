@@ -1,0 +1,78 @@
+meta {
+  name: Suggest Fix
+  type: http
+  seq: 1
+}
+
+docs {
+  # AI Fix Suggestion API
+
+  Endpoint used by the editor to request Mermaid syntax fix suggestions.
+
+  ## Endpoint
+
+  - Method: `POST`
+  - Path: `/api/suggest-fix`
+  - Default URL in this request: `http://localhost:3000/api/suggest-fix`
+
+  ## Request
+
+  ### Headers
+
+  - `Content-Type: application/json`
+
+  ### JSON body fields
+
+  - `error` (`string`): raw Mermaid parser/rendering error
+  - `code` (`string`): Mermaid source text
+  - `diagramType` (`string`): diagram family label
+  - `lineNumber` (`number`, optional): line where error happened
+
+  ### Request example
+
+  ```json
+  {
+    "error": "Parse error on line 3",
+    "code": "graph TD\nA[Start] --> B{Decision}",
+    "diagramType": "flowchart",
+    "lineNumber": 3
+  }
+  ```
+
+  ## Response
+
+  ### 200 OK
+
+  ```json
+  {
+    "suggestion": "Use proper arrow syntax and close all brackets."
+  }
+  ```
+
+  ### 500 Error
+
+  ```json
+  {
+    "suggestion": "Unable to generate AI suggestion at the moment. Please check the reference guide for syntax examples."
+  }
+  ```
+}
+
+post {
+  url: http://localhost:3000/api/suggest-fix
+  body: json
+  auth: none
+}
+
+headers {
+  content-type: application/json
+}
+
+body:json {
+  {
+    "error": "Parse error on line 3",
+    "code": "graph TD\nA[Start] --> B{Decision}",
+    "diagramType": "flowchart",
+    "lineNumber": 3
+  }
+}

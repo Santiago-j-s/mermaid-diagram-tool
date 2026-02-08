@@ -1,27 +1,32 @@
 import { useEffect, useRef, useState } from "react";
-import type { MermaidConfig } from "mermaid";
+import type { RenderOptions } from "beautiful-mermaid";
+import {
+  detectDiagramType,
+  isBeautifulMermaidSupportedType,
+} from "@/lib/mermaid/detectDiagramType";
 
 interface UseMermaidReturn {
-  mermaidRef: React.MutableRefObject<any>;
+  mermaidRef: React.MutableRefObject<BeautifulMermaidModule | null>;
   isReady: boolean;
-  renderDiagram: (code: string, containerId: string) => Promise<{ svg: string } | { error: string }>;
+  renderDiagram: (
+    code: string,
+    containerId: string,
+  ) => Promise<{ svg: string } | { error: string }>;
 }
 
-const mermaidConfig: MermaidConfig = {
-  startOnLoad: false,
-  theme: "default",
-  securityLevel: "loose",
-  fontFamily: "DM Sans, sans-serif",
-  suppressErrorRendering: true,
-  logLevel: "error",
-  flowchart: {
-    useMaxWidth: true,
-    htmlLabels: true,
-  },
+type BeautifulMermaidModule = {
+  renderMermaid: (text: string, options?: RenderOptions) => Promise<string>;
 };
 
+const renderOptions: RenderOptions = {
+  font: "DM Sans, sans-serif",
+};
+
+const unsupportedTypeError =
+  "This diagram type is not supported by the current renderer yet. Supported: flowchart, state, sequence, class, ER.";
+
 export function useMermaid(): UseMermaidReturn {
-  const mermaidRef = useRef<any>(null);
+  const mermaidRef = useRef<BeautifulMermaidModule | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -31,17 +36,14 @@ export function useMermaid(): UseMermaidReturn {
       if (typeof window === "undefined") return;
 
       try {
-        const mermaidModule = await import("mermaid");
-        const mermaid = mermaidModule.default;
-        
-        mermaid.initialize(mermaidConfig);
-        
+        const beautifulMermaidModule = await import("beautiful-mermaid");
+
         if (isMounted) {
-          mermaidRef.current = mermaid;
+          mermaidRef.current = beautifulMermaidModule;
           setIsReady(true);
         }
       } catch (err) {
-        console.error("Failed to initialize Mermaid:", err);
+        console.error("Failed to initialize renderer:", err);
       }
     };
 
@@ -52,16 +54,28 @@ export function useMermaid(): UseMermaidReturn {
     };
   }, []);
 
-  const renderDiagram = async (code: string, containerId: string) => {
+  const renderDiagram = async (code: string, _containerId: string) => {
     if (!mermaidRef.current || !isReady) {
-      return { error: "Mermaid not initialized" };
+      return { error: "Renderer not initialized" };
+    }
+
+    const diagramType = detectDiagramType(code);
+    if (
+      diagramType !== "unknown" &&
+      !isBeautifulMermaidSupportedType(diagramType)
+    ) {
+      return { error: unsupportedTypeError };
     }
 
     try {
-      const { svg } = await mermaidRef.current.render(containerId, code);
+      const svg = await mermaidRef.current.renderMermaid(code, renderOptions);
       return { svg };
-    } catch (err: any) {
-      return { error: err.message || "Rendering failed" };
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return { error: err.message };
+      }
+
+      return { error: "Rendering failed" };
     }
   };
 
@@ -71,4 +85,3 @@ export function useMermaid(): UseMermaidReturn {
     renderDiagram,
   };
 }
-

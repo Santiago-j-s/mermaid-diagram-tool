@@ -1,8 +1,9 @@
 import { referenceData } from "./examples";
+import type { DiagramType } from "./detectDiagramType";
 
 export const getFriendlyErrorMessage = (
   error: string,
-  diagramType: "flowchart" | "sequence" | "journey" | "unknown" = "unknown",
+  diagramType: DiagramType = "unknown",
 ): { message: string; suggestion: string; lineNumber?: number } => {
   const lowerError = error.toLowerCase();
   const originalError = error;
@@ -10,6 +11,14 @@ export const getFriendlyErrorMessage = (
   const lineMatch =
     originalError.match(/line (\d+)/i) || originalError.match(/on line (\d+)/i);
   const lineNumber = lineMatch ? Number.parseInt(lineMatch[1]) : undefined;
+
+  if (lowerError.includes("not supported by the current renderer")) {
+    return {
+      message: "Diagram type not supported yet",
+      suggestion:
+        "Use flowchart, state, sequence, class, or ER diagram syntax. Journey, Gantt, and Pie are not available in the current renderer.",
+    };
+  }
 
   if (diagramType === "unknown") {
     if (lowerError.includes("sequence") || lowerError.includes("participant")) {
@@ -179,8 +188,13 @@ export const getFriendlyErrorMessage = (
     };
   }
 
-  if (diagramType !== "unknown" && referenceData[diagramType]?.errorPatterns) {
-    for (const pattern of referenceData[diagramType].errorPatterns) {
+  const referenceType =
+    diagramType !== "unknown" && diagramType in referenceData
+      ? (diagramType as keyof typeof referenceData)
+      : null;
+
+  if (referenceType && referenceData[referenceType]?.errorPatterns) {
+    for (const pattern of referenceData[referenceType].errorPatterns) {
       if (pattern.pattern.test(originalError)) {
         return {
           message: lineNumber
@@ -206,7 +220,12 @@ export const getFriendlyErrorMessage = (
   const diagramGuidance = {
     flowchart: "Start with 'graph TD' and use A --> B for connections",
     sequence: "Start with 'sequenceDiagram' and define participants first",
+    state: "Start with 'stateDiagram-v2' and connect states using -->",
+    class: "Start with 'classDiagram' and define classes before relationships",
+    er: "Start with 'erDiagram' and define entities and relationships",
     journey: "Start with 'journey' then 'title', followed by sections",
+    gantt: "Gantt is currently unsupported by this renderer",
+    pie: "Pie is currently unsupported by this renderer",
     unknown: "Check your diagram type declaration and syntax",
   };
 

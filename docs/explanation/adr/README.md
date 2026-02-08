@@ -37,6 +37,7 @@ Use zero-padded numbers and increment for each new ADR.
 
 ## ADR Index
 
-| ADR                               | Title                                     | Status   |
-| --------------------------------- | ----------------------------------------- | -------- |
-| [0001](0001-adopt-adr-process.md) | Adopt ADR process for technical decisions | Accepted |
+| ADR                                                    | Title                                                   | Status   |
+| ------------------------------------------------------ | ------------------------------------------------------- | -------- |
+| [0001](0001-adopt-adr-process.md)                      | Adopt ADR process for technical decisions               | Accepted |
+| [0002](0002-replace-mermaid-with-beautiful-mermaid.md) | Replace Mermaid runtime with beautiful-mermaid renderer | Proposed |

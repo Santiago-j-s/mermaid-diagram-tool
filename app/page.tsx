@@ -8,12 +8,15 @@ import { ReferencePanel } from "@/components/reference-panel";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DiagramPreview } from "@/components/diagram-preview";
 import { ExportMenu } from "@/components/export-menu";
-import { AutoSaveIndicator } from "@/components/auto-save-indicator"
+import { AutoSaveIndicator } from "@/components/auto-save-indicator";
 import { ResizablePanels } from "@/components/resizable-panels";
 import { defaultDiagram, exampleDiagrams } from "@/lib/mermaid/examples";
 import { getFriendlyErrorMessage } from "@/lib/mermaid/getFriendlyErrorMessage";
 import { getAISuggestion } from "@/lib/mermaid/getAISuggestion";
-import { detectDiagramType } from "@/lib/mermaid/detectDiagramType";
+import {
+  detectDiagramType,
+  isBeautifulMermaidSupportedType,
+} from "@/lib/mermaid/detectDiagramType";
 import { useMermaid } from "@/hooks/use-mermaid";
 import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -38,17 +41,19 @@ export default function MermaidEditor() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date>(new Date());
   const [isFullscreen, setIsFullscreen] = useState(false);
-  
+
   const previewRef = useRef<HTMLDivElement>(null);
   const renderTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
-  
+
   const { isReady, renderDiagram } = useMermaid();
 
   function handleExport() {
     const svgElement = previewRef.current?.querySelector("svg");
     if (svgElement) {
       const svgData = new XMLSerializer().serializeToString(svgElement);
-      const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const svgBlob = new Blob([svgData], {
+        type: "image/svg+xml;charset=utf-8",
+      });
       const svgUrl = URL.createObjectURL(svgBlob);
       const downloadLink = document.createElement("a");
       downloadLink.href = svgUrl;
@@ -57,7 +62,9 @@ export default function MermaidEditor() {
       downloadLink.click();
       document.body.removeChild(downloadLink);
       URL.revokeObjectURL(svgUrl);
-      toast.success("Downloaded!", { description: "Diagram saved as SVG file" });
+      toast.success("Downloaded!", {
+        description: "Diagram saved as SVG file",
+      });
     }
   }
 
@@ -139,7 +146,9 @@ export default function MermaidEditor() {
           ${
             isLoadingSuggestion
               ? '<p class="text-xs text-gray-500 mt-2">Getting AI-powered suggestion...</p>'
-              : aiSuggestion ? `<p class="text-xs text-gray-700 dark:text-gray-300 mt-2">${aiSuggestion}</p>` : ""
+              : aiSuggestion
+                ? `<p class="text-xs text-gray-700 dark:text-gray-300 mt-2">${aiSuggestion}</p>`
+                : ""
           }
         </div>
       </div>
@@ -152,12 +161,27 @@ export default function MermaidEditor() {
 
   function loadExample(example: (typeof exampleDiagrams)[0]) {
     setCode(example.code);
-    toast.success("Example loaded", { description: `${example.name} diagram loaded` });
+    toast.success("Example loaded", {
+      description: `${example.name} diagram loaded`,
+    });
   }
+
+  function isTemplateSupported(templateCode: string) {
+    const diagramType = detectDiagramType(templateCode);
+    return (
+      diagramType !== "unknown" && isBeautifulMermaidSupportedType(diagramType)
+    );
+  }
+
+  const supportedExampleDiagrams = exampleDiagrams.filter((example) =>
+    isTemplateSupported(example.code),
+  );
 
   function loadReferenceExample(example: string) {
     setCode(example);
-    toast.success("Example loaded", { description: "Reference example loaded into editor" });
+    toast.success("Example loaded", {
+      description: "Reference example loaded into editor",
+    });
   }
 
   if (!isReady) {
@@ -167,7 +191,9 @@ export default function MermaidEditor() {
           <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
             <div className="w-6 h-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
           </div>
-          <p className="text-sm text-muted-foreground font-medium">Preparing editor...</p>
+          <p className="text-sm text-muted-foreground font-medium">
+            Preparing editor...
+          </p>
         </div>
       </div>
     );
@@ -179,71 +205,87 @@ export default function MermaidEditor() {
         <SidebarInset>
           {!isFullscreen && (
             <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50 theme-transition">
-            <div className="container mx-auto px-6 py-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-3">
-                    <Image src="/logo.svg" alt="Mermaid Wave" width={50} height={50} />
-                    <div>
-                      <h1 className="text-xl font-semibold text-foreground tracking-tight">
-                        Mermaid Wave
-                      </h1>
-                      <p className="text-sm text-muted-foreground">
-                        Live Mermaid editor with AI suggestions and syntax validation
-                      </p>
+              <div className="container mx-auto px-6 py-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src="/logo.svg"
+                        alt="Mermaid Wave"
+                        width={50}
+                        height={50}
+                      />
+                      <div>
+                        <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                          Mermaid Wave
+                        </h1>
+                        <p className="text-sm text-muted-foreground">
+                          Live Mermaid editor with AI suggestions and syntax
+                          validation
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <AutoSaveIndicator lastSaved={lastSaved} />
-                  <ThemeToggle />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="gap-2 theme-transition"
-                  >
-                    <BookOpen className="w-4 h-4" />
-                    Cheatsheet
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    <AutoSaveIndicator lastSaved={lastSaved} />
+                    <ThemeToggle />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSidebarOpen(!sidebarOpen)}
+                      className="gap-2 theme-transition"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      Cheatsheet
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </header>
+            </header>
           )}
 
           <main className="flex-1 flex flex-col">
-            <div className={`container mx-auto ${isFullscreen ? "px-0 py-0 max-w-none h-screen" : "px-6 py-8"} flex-1 flex flex-col gap-8`}>
-              {!isFullscreen && (<div>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h2 className="text-lg font-semibold text-foreground">
-                      Not sure where to start?
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                      Get started with these diagram templates
-                    </p>
+            <div
+              className={`container mx-auto ${isFullscreen ? "px-0 py-0 max-w-none h-screen" : "px-6 py-8"} flex-1 flex flex-col gap-8`}
+            >
+              {!isFullscreen && (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Not sure where to start?
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Get started with these diagram templates
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 flex-wrap">
+                    {supportedExampleDiagrams.map((example) => (
+                      <Button
+                        key={example.name}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => loadExample(example)}
+                        className="theme-transition"
+                      >
+                        {example.name}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-end mt-4">
+                    <ExportMenu
+                      getSvgElement={getSvgElement}
+                      disabled={!!error}
+                    />
                   </div>
                 </div>
-                <div className="flex gap-3 flex-wrap">
-                  {exampleDiagrams.map((example) => (
-                    <Button
-                      key={example.name}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => loadExample(example)}
-                      className="theme-transition"
-                    >
-                      {example.name}
-                    </Button>
-                  ))}
-                </div>
-                <div className="flex items-center justify-end mt-4">
-                  <ExportMenu getSvgElement={getSvgElement} disabled={!!error} />
-                </div>
-              </div>)}
+              )}
 
-              <div className={`flex-1 flex flex-col ${isFullscreen ? "h-full" : ""}`} style={!isFullscreen ? { minHeight: "600px" } : {}}>
+              <div
+                className={`flex-1 flex flex-col ${isFullscreen ? "h-full" : ""}`}
+                style={!isFullscreen ? { minHeight: "600px" } : {}}
+              >
                 <ResizablePanels
                   leftPanel={<TextEditor value={code} onChange={setCode} />}
                   rightPanel={

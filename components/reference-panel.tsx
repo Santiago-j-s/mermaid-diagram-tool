@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BookOpen, ChevronDown, ChevronRight } from "lucide-react";
 import { referenceData } from "@/lib/mermaid/examples";
+import {
+  detectDiagramType,
+  isBeautifulMermaidSupportedType,
+} from "@/lib/mermaid/detectDiagramType";
 import { toast } from "sonner";
 
 interface ReferencePanelProps {
@@ -31,6 +35,12 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
       description: "Reference example loaded into editor",
     });
   };
+
+  const selectedExample = referenceData[selectedReference].example;
+  const selectedDiagramType = detectDiagramType(selectedExample);
+  const isSelectedExampleSupported =
+    selectedDiagramType !== "unknown" &&
+    isBeautifulMermaidSupportedType(selectedDiagramType);
 
   return (
     <div className="flex flex-col h-full theme-transition">
@@ -110,9 +120,8 @@ export function ReferencePanel({ onLoadExample }: ReferencePanelProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() =>
-                  loadReferenceExample(referenceData[selectedReference].example)
-                }
+                onClick={() => loadReferenceExample(selectedExample)}
+                disabled={!isSelectedExampleSupported}
                 className="text-xs h-6 px-2 theme-transition"
               >
                 Load

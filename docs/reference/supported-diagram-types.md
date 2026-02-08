@@ -4,13 +4,18 @@ Technical reference for diagram-type support in Mermaid Wave.
 
 ## Rendering Support
 
-- Mermaid Wave renders diagrams through the Mermaid library (`hooks/use-mermaid.ts`).
-- Any syntax supported by the installed Mermaid runtime can be rendered.
-- The project currently depends on `mermaid: latest` (`package.json`).
+- Mermaid Wave renders diagrams through `beautiful-mermaid` (`hooks/use-mermaid.ts`).
+- The project currently depends on `beautiful-mermaid` (`package.json`).
+- Renderer-supported diagram types are:
+  - Flowchart (`graph`, `flowchart`)
+  - Sequence (`sequenceDiagram`)
+  - State (`stateDiagram`, `stateDiagram-v2`)
+  - Class (`classDiagram`)
+  - ER (`erDiagram`)
 
 ## In-App Type-Aware Features
 
-The app has extra type-aware behavior for a subset of diagram types.
+The app has extra type-aware behavior for a subset of diagram types in friendly error handling and references.
 
 - `flowchart`
 - `sequence`
@@ -26,16 +31,13 @@ These are used by:
 
 ### Starter template buttons (home screen)
 
-`lib/mermaid/examples.ts` currently includes starter templates for:
+The home screen currently shows starter templates for:
 
 - Flowchart
 - Sequence
-- User Journey
 - Class Diagram
 - State Diagram
 - ER Diagram
-- Gantt Chart
-- Pie Chart
 
 ### Reference panel categories (cheatsheet)
 
@@ -47,7 +49,8 @@ These are used by:
 
 ## Practical Implication
 
-- You can still render other Mermaid diagram types if Mermaid supports them.
+- Unsupported templates (Journey, Gantt, Pie) are hidden from starter buttons.
+- Journey still appears in the reference panel, but its example load action is disabled under the current renderer.
 - For non-detected types, the app falls back to `unknown` for type-specific guidance paths.
 - Error guidance quality is strongest for flowchart, sequence, and journey.
 

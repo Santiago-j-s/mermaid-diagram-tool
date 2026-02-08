@@ -24,4 +24,4 @@ Technical facts and behavior of the product.
 
 Architecture, concepts, and design rationale.
 
-- Coming in next cycles
+- [Architecture overview](explanation/architecture-overview.md)

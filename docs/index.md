@@ -14,6 +14,7 @@ Task-oriented guides for specific outcomes.
 
 - [Run Mermaid Wave locally](how-to/how-to-run-locally.md)
 - [Use the reference panel](how-to/how-to-use-reference-panel.md)
+- [Document existing and future work](how-to/how-to-document-work.md)
 
 ## Reference
 

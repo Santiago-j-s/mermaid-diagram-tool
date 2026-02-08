@@ -29,3 +29,4 @@ Technical facts and behavior of the product.
 Architecture, concepts, and design rationale.
 
 - [Architecture overview](explanation/architecture-overview.md)
+- [Architecture Decision Records (ADRs)](explanation/adr/README.md)

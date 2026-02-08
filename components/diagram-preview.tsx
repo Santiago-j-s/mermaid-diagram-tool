@@ -14,7 +14,12 @@ interface DiagramPreviewProps {
   onFullscreen?: () => void;
 }
 
-export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: DiagramPreviewProps) {
+export function DiagramPreview({
+  svgContent,
+  isLoading,
+  error,
+  onFullscreen,
+}: DiagramPreviewProps) {
   const [zoom, setZoom] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -54,13 +59,23 @@ export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: D
         <div className="flex items-center gap-2">
           {!error && !isLoading && (
             <ButtonGroup>
-              <Button variant="outline" size="sm" onClick={handleZoomOut} disabled={zoom <= 0.5}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleZoomOut}
+                disabled={zoom <= 0.5}
+              >
                 <ZoomOut className="w-4 h-4" />
               </Button>
               <Button variant="outline" size="sm" onClick={handleReset}>
                 <RotateCcw className="w-4 h-4" />
               </Button>
-              <Button variant="outline" size="sm" onClick={handleZoomIn} disabled={zoom >= 3}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleZoomIn}
+                disabled={zoom >= 3}
+              >
                 <ZoomIn className="w-4 h-4" />
               </Button>
             </ButtonGroup>
@@ -71,7 +86,10 @@ export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: D
             </Button>
           )}
           {error && (
-            <Badge variant="destructive" className="text-xs ml-auto font-medium">
+            <Badge
+              variant="destructive"
+              className="text-xs ml-auto font-medium"
+            >
               Error
             </Badge>
           )}
@@ -92,11 +110,14 @@ export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: D
               <div className="p-3 bg-accent/10 rounded-lg mb-3 inline-block">
                 <div className="w-6 h-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
               </div>
-              <p className="text-sm text-muted-foreground font-medium">Loading renderer...</p>
+              <p className="text-sm text-muted-foreground font-medium">
+                Loading renderer...
+              </p>
             </div>
           </div>
         ) : (
           <div
+            data-diagram-content
             className="w-full h-full flex items-center justify-center"
             style={{
               transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
@@ -114,4 +135,3 @@ export function DiagramPreview({ svgContent, isLoading, error, onFullscreen }: D
     </Card>
   );
 }
-

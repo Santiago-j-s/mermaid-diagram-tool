@@ -146,7 +146,10 @@ export default function MermaidEditor() {
   }, [code, isReady, renderDiagram]);
 
   function getSvgElement() {
-    return previewRef.current?.querySelector("svg") || null;
+    const element = previewRef.current?.querySelector(
+      "[data-diagram-content] svg",
+    );
+    return element instanceof SVGSVGElement ? element : null;
   }
 
   function loadExample(example: (typeof exampleDiagrams)[0]) {

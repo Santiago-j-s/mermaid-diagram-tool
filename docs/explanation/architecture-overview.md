@@ -7,7 +7,7 @@ This page explains how Mermaid Wave is structured and why the current architectu
 Mermaid Wave is a Next.js App Router application where the main editor experience runs client-side.
 
 - The editing page lives in `app/page.tsx`.
-- Mermaid rendering runs in the browser through `hooks/use-mermaid.ts`.
+- Diagram rendering runs in the browser through `hooks/use-mermaid.ts`, backed by `beautiful-mermaid`.
 - The backend surface is intentionally small: `POST /api/suggest-fix` in `app/api/suggest-fix/route.ts`.
 
 This design favors low-latency editing and immediate visual feedback.
@@ -48,7 +48,7 @@ This design favors low-latency editing and immediate visual feedback.
 
 ## Why This Approach
 
-- Client-side Mermaid rendering avoids server rendering overhead for each edit.
+- Client-side rendering avoids server rendering overhead for each edit.
 - Local storage preserves user work with minimal complexity.
 - A dedicated API route is used only where server-side access is needed (LLM call for fix suggestions).
 - Clear separation between feature components and domain helpers keeps behavior easier to evolve.
@@ -56,6 +56,7 @@ This design favors low-latency editing and immediate visual feedback.
 ## Known Constraints
 
 - `app/page.tsx` currently carries a lot of orchestration logic.
+- The active renderer currently supports flowchart, state, sequence, class, and ER diagrams.
 - Friendly error handling is strongest for flowchart, sequence, and journey diagrams.
 - API request/response contract details are maintained in Bruno instead of duplicated markdown.
 

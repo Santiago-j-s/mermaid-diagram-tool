@@ -28,8 +28,10 @@ export default function RootLayout({
   // Next themes has known hydration issues
   return (
     <html lang="en" suppressHydrationWarning>
-
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+      <body
+        suppressHydrationWarning
+        className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
+      >
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"

@@ -24,9 +24,13 @@ export function ExportMenu({ getSvgElement, disabled }: ExportMenuProps) {
 
     try {
       exportToSVG(svgElement);
-      toast.success("Downloaded!", { description: "Diagram saved as SVG file" });
-    } catch (err) {
-      toast.error("Export failed", { description: "Could not download SVG file" });
+      toast.success("Downloaded!", {
+        description: "Diagram saved as SVG file",
+      });
+    } catch {
+      toast.error("Export failed", {
+        description: "Could not download SVG file",
+      });
     }
   };
 
@@ -40,9 +44,13 @@ export function ExportMenu({ getSvgElement, disabled }: ExportMenuProps) {
     setIsExporting(true);
     try {
       await exportToPNG(svgElement);
-      toast.success("Downloaded!", { description: "Diagram saved as PNG file" });
-    } catch (err) {
-      toast.error("Export failed", { description: "Could not download PNG file" });
+      toast.success("Downloaded!", {
+        description: "Diagram saved as PNG file",
+      });
+    } catch {
+      toast.error("Export failed", {
+        description: "Could not download PNG file",
+      });
     } finally {
       setIsExporting(false);
     }
@@ -73,4 +81,3 @@ export function ExportMenu({ getSvgElement, disabled }: ExportMenuProps) {
     </ButtonGroup>
   );
 }
-

@@ -12,6 +12,7 @@ export default defineConfig([
     "out/",
     "dist/",
     "build/",
+    "next-env.d.ts",
     "*.config.js",
     "*.config.mjs",
     "pnpm-lock.yaml",

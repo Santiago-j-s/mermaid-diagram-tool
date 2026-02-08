@@ -12,7 +12,7 @@ Learning-oriented guides for first-time users.
 
 Task-oriented guides for specific outcomes.
 
-- Coming in next cycles
+- [Run Mermaid Wave locally](how-to/how-to-run-locally.md)
 
 ## Reference
 

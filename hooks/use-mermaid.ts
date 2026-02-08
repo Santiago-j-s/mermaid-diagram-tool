@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { RenderOptions } from "beautiful-mermaid";
 import {
   detectDiagramType,
@@ -19,7 +19,7 @@ type BeautifulMermaidModule = {
 };
 
 const renderOptions: RenderOptions = {
-  font: "DM Sans, sans-serif",
+  font: "DM Sans",
 };
 
 const unsupportedTypeError =
@@ -54,30 +54,33 @@ export function useMermaid(): UseMermaidReturn {
     };
   }, []);
 
-  const renderDiagram = async (code: string, _containerId: string) => {
-    if (!mermaidRef.current || !isReady) {
-      return { error: "Renderer not initialized" };
-    }
-
-    const diagramType = detectDiagramType(code);
-    if (
-      diagramType !== "unknown" &&
-      !isBeautifulMermaidSupportedType(diagramType)
-    ) {
-      return { error: unsupportedTypeError };
-    }
-
-    try {
-      const svg = await mermaidRef.current.renderMermaid(code, renderOptions);
-      return { svg };
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        return { error: err.message };
+  const renderDiagram = useCallback(
+    async (code: string, _containerId: string) => {
+      if (!mermaidRef.current || !isReady) {
+        return { error: "Renderer not initialized" };
       }
 
-      return { error: "Rendering failed" };
-    }
-  };
+      const diagramType = detectDiagramType(code);
+      if (
+        diagramType !== "unknown" &&
+        !isBeautifulMermaidSupportedType(diagramType)
+      ) {
+        return { error: unsupportedTypeError };
+      }
+
+      try {
+        const svg = await mermaidRef.current.renderMermaid(code, renderOptions);
+        return { svg };
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          return { error: err.message };
+        }
+
+        return { error: "Rendering failed" };
+      }
+    },
+    [isReady],
+  );
 
   return {
     mermaidRef,

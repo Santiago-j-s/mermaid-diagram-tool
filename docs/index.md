@@ -19,6 +19,7 @@ Task-oriented guides for specific outcomes.
 Technical facts and behavior of the product.
 
 - [AI fix suggestion API](reference/api-suggest-fix.md)
+- [Editor features](reference/editor-features.md)
 
 ## Explanation
 

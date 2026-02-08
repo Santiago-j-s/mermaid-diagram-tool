@@ -20,6 +20,7 @@ Technical facts and behavior of the product.
 
 - [AI fix suggestion API](reference/api-suggest-fix.md)
 - [Editor features](reference/editor-features.md)
+- [Supported diagram types](reference/supported-diagram-types.md)
 
 ## Explanation
 

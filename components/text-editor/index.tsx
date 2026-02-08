@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { ButtonGroup } from "../ui/button-group";
 import { useTheme } from "next-themes";
 import type { editor as MonacoEditor } from "monaco-editor";
+import type { Monaco } from "@monaco-editor/react";
 
 function LoadingState() {
   return (
@@ -35,7 +36,7 @@ const copyToClipboard = async (code: string) => {
     toast.success("Copied!", {
       description: "Diagram code copied to clipboard",
     });
-  } catch (err) {
+  } catch {
     toast.error("Failed to copy", {
       description: "Could not copy to clipboard",
     });
@@ -48,7 +49,7 @@ interface TextEditorProps {
 
 export function TextEditor({ value, onChange }: TextEditorProps) {
   const editorRef = useRef<MonacoEditor.IStandaloneCodeEditor | null>(null);
-  const monacoRef = useRef<any>(null);
+  const monacoRef = useRef<Monaco | null>(null);
   const { resolvedTheme } = useTheme();
 
   function undo() {
@@ -59,7 +60,8 @@ export function TextEditor({ value, onChange }: TextEditorProps) {
     editorRef.current?.trigger("keyboard", "redo", null);
   }
 
-  const editorTheme = resolvedTheme === "dark" ? "mermaid-dark-theme" : "mermaid-light-theme";
+  const editorTheme =
+    resolvedTheme === "dark" ? "mermaid-dark-theme" : "mermaid-light-theme";
 
   useEffect(() => {
     if (monacoRef.current && editorRef.current) {

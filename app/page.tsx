@@ -18,7 +18,6 @@ import {
   isBeautifulMermaidSupportedType,
 } from "@/lib/mermaid/detectDiagramType";
 import { useMermaid } from "@/hooks/use-mermaid";
-import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import {
   SidebarProvider,
@@ -30,14 +29,13 @@ import { toast } from "sonner";
 import Image from "next/image";
 
 export default function MermaidEditor() {
+  const [isMounted, setIsMounted] = useState(false);
   const [code, setCode] = useLocalStorage({
     storageKey: "mermaid-diagram-code",
     defaultValue: defaultDiagram,
   });
   const [svgContent, setSvgContent] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
-  const [isLoadingSuggestion, setIsLoadingSuggestion] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date>(new Date());
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -47,79 +45,23 @@ export default function MermaidEditor() {
 
   const { isReady, renderDiagram } = useMermaid();
 
-  function handleExport() {
-    const svgElement = previewRef.current?.querySelector("svg");
-    if (svgElement) {
-      const svgData = new XMLSerializer().serializeToString(svgElement);
-      const svgBlob = new Blob([svgData], {
-        type: "image/svg+xml;charset=utf-8",
-      });
-      const svgUrl = URL.createObjectURL(svgBlob);
-      const downloadLink = document.createElement("a");
-      downloadLink.href = svgUrl;
-      downloadLink.download = "diagram.svg";
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      URL.revokeObjectURL(svgUrl);
-      toast.success("Downloaded!", {
-        description: "Diagram saved as SVG file",
-      });
-    }
-  }
-
   useEffect(() => {
-    if (!isReady) return;
+    setIsMounted(true);
+  }, []);
 
-    if (renderTimeoutRef.current) {
-      clearTimeout(renderTimeoutRef.current);
-    }
-
-    renderTimeoutRef.current = setTimeout(() => {
-      handleRenderDiagram();
-    }, 500);
-
-    return () => {
-      if (renderTimeoutRef.current) {
-        clearTimeout(renderTimeoutRef.current);
-      }
-    };
-  }, [code, isReady]);
-
-  async function handleRenderDiagram() {
-    setError(null);
-    setAiSuggestion(null);
-
-    const containerId = `mermaid-${Date.now()}`;
-    const result = await renderDiagram(code, containerId);
-
-    if ("error" in result) {
-      handleRenderError(result.error);
-    } else {
-      setSvgContent(result.svg);
-      setLastSaved(new Date());
-    }
-  }
-
-  function handleRenderError(errorMessage: string) {
-    const diagramType = detectDiagramType(code);
-    const friendlyError = getFriendlyErrorMessage(errorMessage, diagramType);
-    setError(friendlyError.message);
-
-    setIsLoadingSuggestion(true);
-    getAISuggestion(errorMessage, code, diagramType, friendlyError.lineNumber)
-      .then((suggestion) => {
-        setAiSuggestion(suggestion);
-      })
-      .finally(() => {
-        setIsLoadingSuggestion(false);
-      });
-
+  function getErrorPreviewHtml(
+    friendlyError: ReturnType<typeof getFriendlyErrorMessage>,
+    aiSuggestion?: string,
+  ) {
     const lineNumberDisplay = friendlyError.lineNumber
       ? `Line ${friendlyError.lineNumber}: `
       : "";
 
-    setSvgContent(`
+    const aiSuggestionHtml = aiSuggestion
+      ? `<p class="text-xs text-gray-700 dark:text-gray-300 mt-2">${aiSuggestion}</p>`
+      : "";
+
+    return `
       <div class="flex items-center justify-center h-full">
         <div class="text-center max-w-md p-6">
           <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
@@ -137,23 +79,71 @@ export default function MermaidEditor() {
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs font-medium text-blue-800 dark:text-blue-300 mb-1">💡 Quick Fix:</p>
+                  <p class="text-xs font-medium text-blue-800 dark:text-blue-300 mb-1">Quick Fix:</p>
                   <p class="text-sm text-blue-700 dark:text-blue-400">${friendlyError.suggestion}</p>
                 </div>
               </div>
             </div>
           </div>
-          ${
-            isLoadingSuggestion
-              ? '<p class="text-xs text-gray-500 mt-2">Getting AI-powered suggestion...</p>'
-              : aiSuggestion
-                ? `<p class="text-xs text-gray-700 dark:text-gray-300 mt-2">${aiSuggestion}</p>`
-                : ""
-          }
+          ${aiSuggestionHtml}
         </div>
       </div>
-    `);
+    `;
   }
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    if (renderTimeoutRef.current) {
+      clearTimeout(renderTimeoutRef.current);
+    }
+
+    renderTimeoutRef.current = setTimeout(() => {
+      void (async () => {
+        setError(null);
+
+        const containerId = `mermaid-${Date.now()}`;
+        const result = await renderDiagram(code, containerId);
+
+        if ("error" in result) {
+          const diagramType = detectDiagramType(code);
+          const friendlyError = getFriendlyErrorMessage(
+            result.error,
+            diagramType,
+          );
+          setError(friendlyError.message);
+          setSvgContent(
+            getErrorPreviewHtml(
+              friendlyError,
+              "Getting AI-powered suggestion...",
+            ),
+          );
+
+          const aiSuggestion = await getAISuggestion(
+            result.error,
+            code,
+            diagramType,
+            friendlyError.lineNumber,
+          );
+
+          if (aiSuggestion) {
+            setSvgContent(getErrorPreviewHtml(friendlyError, aiSuggestion));
+          }
+
+          return;
+        }
+
+        setSvgContent(result.svg);
+        setLastSaved(new Date());
+      })();
+    }, 500);
+
+    return () => {
+      if (renderTimeoutRef.current) {
+        clearTimeout(renderTimeoutRef.current);
+      }
+    };
+  }, [code, isReady, renderDiagram]);
 
   function getSvgElement() {
     return previewRef.current?.querySelector("svg") || null;
@@ -184,7 +174,7 @@ export default function MermaidEditor() {
     });
   }
 
-  if (!isReady) {
+  if (!isMounted || !isReady) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">

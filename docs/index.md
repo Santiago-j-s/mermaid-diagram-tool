@@ -18,7 +18,7 @@ Task-oriented guides for specific outcomes.
 
 Technical facts and behavior of the product.
 
-- Coming in next cycles
+- [AI fix suggestion API](reference/api-suggest-fix.md)
 
 ## Explanation
 
